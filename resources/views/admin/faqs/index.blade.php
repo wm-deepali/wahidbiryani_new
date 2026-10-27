@@ -27,19 +27,6 @@
                 <div class="flash-success">{{ session('success') }}</div>
             @endif
 
-            <!-- Filter tabs -->
-            <div class="filter-tabs">
-                <a href="{{ route('admin.faqs.index') }}" class="filter-tab {{ !$type ? 'active' : '' }}">
-                    All <small>{{ $counts->sum() }}</small>
-                </a>
-                @foreach(\App\Models\Faq::TYPES as $key => $label)
-                    <a href="{{ route('admin.faqs.index', ['type' => $key]) }}"
-                        class="filter-tab {{ $type === $key ? 'active' : '' }}">
-                        {{ $label }} <small>{{ $counts[$key] ?? 0 }}</small>
-                    </a>
-                @endforeach
-            </div>
-
             <!-- Main card -->
             <div class="faq-card">
                 <div class="faq-table-wrap">
@@ -48,7 +35,6 @@
                             <tr>
                                 <th style="width:60px">ID</th>
                                 <th>Question</th>
-                                <th style="width:140px">Type</th>
                                 <th style="width:80px">Order</th>
                                 <th style="width:110px">Status</th>
                                 <th style="width:90px">Actions</th>
@@ -63,10 +49,8 @@
 
                                     <td>
                                         <div class="question-text">{{ $faq->question }}</div>
-                                        <div class="target-text">{{ $faq->target_label }}</div>
+                                        <div class="target-text">{{ \Illuminate\Support\Str::limit($faq->answer, 90) }}</div>
                                     </td>
-
-                                    <td><span class="pill pill-type">{{ $faq->type_label }}</span></td>
 
                                     <td><span class="id-chip">{{ $faq->sort_order }}</span></td>
 
@@ -94,7 +78,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">
+                                    <td colspan="5">
                                         <div class="empty-state">
                                             <div class="empty-icon"><i class="fa fa-question-circle"></i></div>
                                             <strong style="font-size:14px;color:var(--text-primary)">No FAQs found</strong>

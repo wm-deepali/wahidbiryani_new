@@ -7,17 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class ContactEnquiry extends Model
 {
     protected $fillable = [
-        'full_name',
+        'name',
         'email',
-        'company',
         'phone',
-        'service',
+        'request_type',
         'message',
-        'status',
         'ip_address',
-        'user_agent',
-        'mobile_verified',
-        'mobile_verified_at',
-        'admin_notified_at'
+        'is_read',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
     ];
 }

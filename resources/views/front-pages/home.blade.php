@@ -1,151 +1,8 @@
 @extends('layouts.app')
 
+@section('body_class', 'home-page')
+
 @section('content')
-
-
-
-  <!-- Mobile Offcanvas Menu (Collapsible Dropdowns) -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
-    <div class="offcanvas-header">
-      <a href="index.html" class="logo-link p-1 bg-white rounded">
-        <img src="assets/img/logo.png" alt="Wahid Biryani" style="max-height: 44px;">
-      </a>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <ul class="offcanvas-nav">
-        <li class="mb-3">
-          <a href="index.html" class="offcanvas-link">Home</a>
-        </li>
-
-        <!-- Mobile Collapse: Our Legacy -->
-        <li class="mb-3">
-          <a href="#mobileLegacyCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="mobileLegacyCollapse">Our Legacy <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse ps-3 mt-2" id="mobileLegacyCollapse">
-            <a href="our-story.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Our Story</a>
-            <a href="wahid-legacy.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">The Wahid Biryani Legacy</a>
-            <a href="director-message.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Director's Message</a>
-            <a href="awards.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Awards & Recognitions</a>
-          </div>
-        </li>
-
-        <!-- Mobile Collapse: Signature Dishes -->
-        <li class="mb-3">
-          <a href="signature-dishes.html" class="offcanvas-link">Signature Dishes </a>
-        </li>
-
-        <!-- Direct Link: Menu -->
-        <li class="mb-3">
-          <a href="menu.html" class="offcanvas-link">Menu</a>
-        </li>
-
-        <!-- Direct Link: Our Outlets -->
-        <li class="mb-3">
-          <a href="our-outlets.html" class="offcanvas-link">Our Outlets</a>
-        </li>
-
-        <!-- Mobile Collapse: Gallery -->
-        <li class="mb-3">
-          <a href="#mobileGalleryCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="mobileGalleryCollapse">Gallery <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse ps-3 mt-2" id="mobileGalleryCollapse">
-            <a href="image-gallery.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Image Gallery</a>
-            <a href="video-gallery.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Video's</a>
-          </div>
-        </li>
-
-        <!-- Mobile Collapse: Contact Us -->
-        <li class="mb-3">
-          <a href="#mobileContactCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="mobileContactCollapse">Contact Us <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse ps-3 mt-2" id="mobileContactCollapse">
-            <a href="contact.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Contact Us</a>
-            <a href="feedback.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Feedback & Suggestions</a>
-            <a href="franchise.html" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Franchise Enquiry</a>
-          </div>
-        </li>
-      </ul>
-
-      <div class="offcanvas-footer">
-        <a href="javascript:void(0)" class="btn btn-burgundy-fill w-100 d-block text-center py-3" data-bs-toggle="modal" data-bs-target="#orderOnlineModal" data-bs-dismiss="offcanvas">Order Online</a>
-      </div>
-    </div>
-  </div>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
-    <div class="offcanvas-header">
-      <a href="index.html" class="logo-link p-1 bg-white rounded">
-        <img src="assets/img/logo.png" alt="Wahid Biryani" style="max-height: 44px;">
-      </a>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <ul class="offcanvas-nav">
-        <li class="mb-3">
-          <a href="index.html" class="offcanvas-link ">Home</a>
-        </li>
-
-        <!-- Mobile Collapse: Our Legacy -->
-        <li class="mb-3">
-          <a href="#mobileLegacyCollapse" class="offcanvas-link " data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="mobileLegacyCollapse">Our Legacy <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse  ps-3 mt-2" id="mobileLegacyCollapse">
-            <a href="our-story.html" class="offcanvas-sublink " >Our Story</a>
-            <a href="wahid-legacy.html" class="offcanvas-sublink " >The Wahid Biryani Legacy</a>
-            <a href="director-message.html" class="offcanvas-sublink " >Director's Message</a>
-            <a href="awards.html" class="offcanvas-sublink " >Awards & Recognitions</a>
-          </div>
-        </li>
-
-        <!-- Mobile Collapse: Signature Dishes -->
-        <li class="mb-3">
-        <a href="signature-dishes.html" class="offcanvas-link">Signature Dishes </a>
-        </li>
-
-        <!-- Direct Link: Menu -->
-        <li class="mb-3">
-          <a href="menu.html" class="offcanvas-link ">Menu</a>
-        </li>
-
-        <!-- Direct Link: Our Outlets -->
-        <li class="mb-3">
-          <a href="our-outlets.html" class="offcanvas-link ">Our Outlets</a>
-        </li>
-
-        <!-- Mobile Collapse: Gallery -->
-        <li class="mb-3">
-          <a href="#mobileGalleryCollapse" class="offcanvas-link active" data-bs-toggle="collapse" role="button"
-            aria-expanded="true" aria-controls="mobileGalleryCollapse">Gallery <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse show ps-3 mt-2" id="mobileGalleryCollapse">
-            <a href="image-gallery.html" class="offcanvas-sublink active text-accent" >Image Gallery</a>
-            <a href="video-gallery.html" class="offcanvas-sublink " >Video's</a>
-          </div>
-        </li>
-
-        <!-- Mobile Collapse: Contact Us -->
-        <li class="mb-3">
-          <a href="#mobileContactCollapse" class="offcanvas-link " data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="mobileContactCollapse">Contact Us <i
-              class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
-          <div class="collapse  ps-3 mt-2" id="mobileContactCollapse">
-            <a href="contact.html" class="offcanvas-sublink " >Contact Us</a>
-            <a href="feedback.html" class="offcanvas-sublink " >Feedback & Suggestions</a>
-            <a href="franchise.html" class="offcanvas-sublink " >Franchise Enquiry</a>
-          </div>
-        </li>
-      </ul>
-
-      <div class="offcanvas-footer">
-        <a href="javascript:void(0)" class="btn btn-burgundy-fill w-100 d-block text-center py-3" data-bs-toggle="modal" data-bs-target="#orderOnlineModal" data-bs-dismiss="offcanvas">Order Online</a>
-      </div>
-    </div>
-  </div>
 
   <!-- Hero Section (Mughal Era, Legacy Feel) -->
   <section class="hero-section">
@@ -163,8 +20,9 @@
         recipes, and royal hospitality.</p>
 
       <div class="hero-ctas">
-        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal" class="btn btn-peach-fill magnetic-btn">Order Food Online</a>
-        <a href="about-us.html" class="btn btn-gold-outline magnetic-btn">Explore Our Legacy</a>
+        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
+          class="btn btn-peach-fill magnetic-btn">Order Food Online</a>
+        <a href="{{ route('about-us') }}" class="btn btn-gold-outline magnetic-btn">Explore Our Legacy</a>
       </div>
 
       <!-- Gold delicate ornament line drawing -->
@@ -185,282 +43,290 @@
     </div>
   </section>
 
-
   <!-- Our Legacy ki ek Jhalak (Lineage, Director's Message) -->
-<section class="section-padding bg-cream" id="legacy-teaser">
-  <div class="container">
-    <div class="section-title-wrapper">
-      <span class="urdu-accent">روایتی ورثہ</span>
-      <h2 class="section-title">A Living Tradition</h2>
-      <p class="section-desc">Four generations of Lucknowi dum-pukht tradition, served with the same promise.</p>
-    </div>
+  <section class="section-padding bg-cream" id="legacy-teaser">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="urdu-accent">روایتی ورثہ</span>
+        <h2 class="section-title">A Living Tradition</h2>
+        <p class="section-desc">Four generations of Lucknowi dum-pukht tradition, served with the same promise.</p>
+      </div>
 
-    <div class="row align-items-center justify-content-between g-5">
-      <!-- Text details -->
-      <div class="col-lg-6 reveal-left">
-        <h3 class="font-display text-primary mb-3" style="font-size: 1.85rem;">The Wahid Biryani Legacy</h3>
-        <p class="font-body text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">
-          Our journey began in 1955 in the lanes of Aminabad, where hand-crafted spice secrets redefined the royal
-          flavors of Lucknow. Those recipes and the slow-dum copper kalai techniques have been carefully guarded and
-          passed down from one generation to the next.
-        </p>
-        <p class="font-body text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">
-          Today, the fourth generation carries this legacy forward across our outlets, with the same passion,
-          authenticity, and respect for our seventy-year culinary riwayat.
-        </p>
-
-        <div class="legacy-quote my-4">
-          <p class="quote-text font-display italic text-primary fs-5 mb-2">
-            "We do not cut corners. The spices are ground by hand, the meat is double-marinated, and every handi is
-            sealed with dough. It is our promise to Lucknow."
+      <div class="row align-items-center justify-content-between g-5">
+        <!-- Text details -->
+        <div class="col-lg-6 reveal-left">
+          <h3 class="font-display text-primary mb-3" style="font-size: 1.85rem;">The Wahid Biryani Legacy</h3>
+          <p class="font-body text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">
+            Our journey began in 1955 in the lanes of Aminabad, where hand-crafted spice secrets redefined the royal
+            flavors of Lucknow. Those recipes and the slow-dum copper kalai techniques have been carefully guarded and
+            passed down from one generation to the next.
           </p>
-          <span class="quote-author font-body text-uppercase letter-spacing-1 text-accent fw-600"
-            style="font-size: 0.75rem;">— The Wahid Biryani Family</span>
-        </div>
+          <p class="font-body text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">
+            Today, the fourth generation carries this legacy forward across our outlets, with the same passion,
+            authenticity, and respect for our seventy-year culinary riwayat.
+          </p>
 
-        <a href="about-us.html" class="btn btn-gold-outline magnetic-btn mt-3">Read Our Full Story</a>
-      </div>
-
-      <!-- Highlights visual layout -->
-      <div class="col-lg-5 col-xl-5 offset-xl-1">
-        <div class="legacy-highlights reveal-right">
-          <!-- Decorative Corners -->
-          <div class="parchment-corner top-left"></div>
-          <div class="parchment-corner top-right"></div>
-          <div class="parchment-corner bottom-left"></div>
-          <div class="parchment-corner bottom-right"></div>
-
-          <h4 class="font-display text-accent text-center mb-4 highlights-title">
-            Pride of Lucknow
-            <span class="d-block urdu-subtitle mt-2"
-              style="font-size: 1.1rem; color: var(--color-primary); font-family: var(--font-urdu);">ہر محفل کی شان</span>
-          </h4>
-
-          <!-- Key numbers -->
-          <div class="highlight-grid">
-            <div class="highlight-item">
-              <span class="highlight-value font-display">1955</span>
-              <span class="highlight-label">Serving Since</span>
-            </div>
-            <div class="highlight-item">
-              <span class="highlight-value font-display">4th</span>
-              <span class="highlight-label">Generation of Legacy</span>
-            </div>
-            <div class="highlight-item">
-              <span class="highlight-value font-display">ISO</span>
-              <span class="highlight-label">9001:2015 &amp; 22000:2018</span>
-            </div>
-            <div class="highlight-item">
-              <span class="highlight-value font-display">15–20</span>
-              <span class="highlight-label">Mins Preparation Time</span>
-            </div>
-          </div>
-
-          <!-- Separator -->
-          <div class="highlight-separator">
-            <div class="separator-line"></div>
-            <div class="separator-diamond"></div>
-            <div class="separator-line"></div>
-          </div>
-
-          <!-- Promise list -->
-          <ul class="highlight-list">
-            <li><strong>Fortune Refined Soyabean Oil</strong> used in all cooking</li>
-            <li><strong>4 Outlets:</strong> Aminabad, Nazirabad, Bangla Bazar &amp; Munshi Pulia</li>
-            <li><strong>All India</strong> Franchise &amp; Catering Services Available</li>
-            <li><strong>Order Online</strong> on Swiggy &amp; Zomato</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- Lucknow Ki Shaan Section (Royal Archway 3-Column Layout) -->
-<section
-  class="lucknow-shaan-section position-relative d-flex align-items-center justify-content-center overflow-hidden"
-  style="padding-top: 100px; padding-bottom: 120px;">
-
-  <!-- Background Subtle Pattern -->
-  <div class="shaan-bg-pattern"></div>
-
-  <div class="container position-relative shaan-container">
-
-    <div class="section-title-wrapper">
-      <span class="urdu-accent">روایتی ورثہ</span>
-      <h2 class="section-title">A Living Tradition</h2>
-      <p class="section-desc">From our late founder to the brothers managing our legacy kitchens today.</p>
-    </div>
-
-    <div class="row align-items-stretch justify-content-center g-3 g-lg-4">
-
-      <!-- Column 1: Wahid Biryani Content -->
-      <div class="col-lg-4 col-md-4 col-12 text-center reveal-up">
-        <div class="shaan-arch-wrapper w-100">
-          <div class="shaan-arch-border"></div>
-
-          <div
-            class="shaan-arch-inner d-flex flex-column align-items-center justify-content-center p-4 text-center mx-auto"
-            style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
-            <span class="urdu-accent mb-3" style="font-size: 2.2rem; color: var(--color-accent);">ذائقۂ اودھ</span>
-            <h3 style="color: #FFFDF8; font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 1.2rem;">
-              The Wahid Experience</h3>
-            <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.7;">
-              "Wahid Biryani is not just selling food. It is serving a legacy of Lucknow that has been carried forward
-              since 1955. Every grain of rice holds the secret of the Nawabs."
+          <div class="legacy-quote my-4">
+            <p class="quote-text font-display italic text-primary fs-5 mb-2">
+              "We do not cut corners. The spices are ground by hand, the meat is double-marinated, and every handi is
+              sealed with dough. It is our promise to Lucknow."
             </p>
+            <span class="quote-author font-body text-uppercase letter-spacing-1 text-accent fw-600"
+              style="font-size: 0.75rem;">— The Wahid Biryani Family</span>
           </div>
 
+          <a href="{{ route('about-us') }}" class="btn btn-gold-outline magnetic-btn mt-3">Read Our Full Story</a>
+        </div>
+
+        <!-- Highlights visual layout -->
+        <div class="col-lg-5 col-xl-5 offset-xl-1">
+          <div class="legacy-highlights reveal-right">
+            <!-- Decorative Corners -->
+            <div class="parchment-corner top-left"></div>
+            <div class="parchment-corner top-right"></div>
+            <div class="parchment-corner bottom-left"></div>
+            <div class="parchment-corner bottom-right"></div>
+
+            <h4 class="font-display text-accent text-center mb-4 highlights-title">
+              Pride of Lucknow
+              <span class="d-block urdu-subtitle mt-2"
+                style="font-size: 1.1rem; color: var(--color-primary); font-family: var(--font-urdu);">ہر محفل کی
+                شان</span>
+            </h4>
+
+            <!-- Key numbers -->
+            <div class="highlight-grid">
+              <div class="highlight-item">
+                <span class="highlight-value font-display">1955</span>
+                <span class="highlight-label">Serving Since</span>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-value font-display">4th</span>
+                <span class="highlight-label">Generation of Legacy</span>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-value font-display">ISO</span>
+                <span class="highlight-label">9001:2015 &amp; 22000:2018</span>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-value font-display">15–20</span>
+                <span class="highlight-label">Mins Preparation Time</span>
+              </div>
+            </div>
+
+            <!-- Separator -->
+            <div class="highlight-separator">
+              <div class="separator-line"></div>
+              <div class="separator-diamond"></div>
+              <div class="separator-line"></div>
+            </div>
+
+            <!-- Promise list -->
+            <ul class="highlight-list">
+              <li><strong>Fortune Refined Soyabean Oil</strong> used in all cooking</li>
+              <li><strong>4 Outlets:</strong> Aminabad, Nazirabad, Bangla Bazar &amp; Munshi Pulia</li>
+              <li><strong>All India</strong> Franchise &amp; Catering Services Available</li>
+              <li><strong>Order Online</strong> on Swiggy &amp; Zomato</li>
+            </ul>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Column 2: Image Swiper (image + name overlay) -->
-      <div class="col-lg-4 col-md-4 col-12 text-center reveal-up" style="transition-delay: 0.2s;">
-        <div class="shaan-arch-wrapper w-100">
-          <div class="shaan-arch-border"></div>
+  <!-- Lucknow Ki Shaan Section (Royal Archway 3-Column Layout) -->
+  <section
+    class="lucknow-shaan-section position-relative d-flex align-items-center justify-content-center overflow-hidden"
+    style="padding-top: 100px; padding-bottom: 120px;">
 
-          <div class="shaan-arch-inner shaan-img-arch mx-auto p-0 overflow-hidden"
-            style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
+    <!-- Background Subtle Pattern -->
+    <div class="shaan-bg-pattern"></div>
 
-            <div class="swiper shaan-swiper">
-              <div class="swiper-wrapper">
+    <div class="container position-relative shaan-container">
 
-                <!-- Slide 1 -->
-                <div class="swiper-slide shaan-slide">
-                  <img src="assets/img/md-quraishi.WEBP" class="shaan-slide-img" alt="Late Chaudhary Mohammadu Quraishi">
-                  <div class="shaan-slide-content">
-                    <span class="shaan-role">Legacy <span class="shaan-dot">•</span> <span class="shaan-role-urdu">ورثہ</span></span>
-                    <h4 class="shaan-name">Late Chaudhary Mohammadu Quraishi</h4>
+      <div class="section-title-wrapper">
+        <span class="urdu-accent">روایتی ورثہ</span>
+        <h2 class="section-title">A Living Tradition</h2>
+        <p class="section-desc">From our late founder to the brothers managing our legacy kitchens today.</p>
+      </div>
+
+      <div class="row align-items-stretch justify-content-center g-3 g-lg-4">
+
+        <!-- Column 1: Wahid Biryani Content -->
+        <div class="col-lg-4 col-md-4 col-12 text-center reveal-up">
+          <div class="shaan-arch-wrapper w-100">
+            <div class="shaan-arch-border"></div>
+
+            <div
+              class="shaan-arch-inner d-flex flex-column align-items-center justify-content-center p-4 text-center mx-auto"
+              style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
+              <span class="urdu-accent mb-3" style="font-size: 2.2rem; color: var(--color-accent);">ذائقۂ اودھ</span>
+              <h3 style="color: #FFFDF8; font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 1.2rem;">
+                The Wahid Experience</h3>
+              <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.7;">
+                "Wahid Biryani is not just selling food. It is serving a legacy of Lucknow that has been carried forward
+                since 1955. Every grain of rice holds the secret of the Nawabs."
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Column 2: Image Swiper (image + name overlay) -->
+        <div class="col-lg-4 col-md-4 col-12 text-center reveal-up" style="transition-delay: 0.2s;">
+          <div class="shaan-arch-wrapper w-100">
+            <div class="shaan-arch-border"></div>
+
+            <div class="shaan-arch-inner shaan-img-arch mx-auto p-0 overflow-hidden"
+              style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
+
+              <div class="swiper shaan-swiper">
+                <div class="swiper-wrapper">
+
+                  <!-- Slide 1 -->
+                  <div class="swiper-slide shaan-slide">
+                    <img src="assets/img/md-quraishi.WEBP" class="shaan-slide-img"
+                      alt="Late Chaudhary Mohammadu Quraishi">
+                    <div class="shaan-slide-content">
+                      <span class="shaan-role">Legacy <span class="shaan-dot">•</span> <span
+                          class="shaan-role-urdu">ورثہ</span></span>
+                      <h4 class="shaan-name">Late Chaudhary Mohammadu Quraishi</h4>
+                    </div>
                   </div>
+
+                  <!-- Slide 2 -->
+                  <div class="swiper-slide shaan-slide">
+                    <img src="assets/img/aladeen.jpeg" class="shaan-slide-img" alt="Late Aladeen Quraishi">
+                    <div class="shaan-slide-content">
+                      <span class="shaan-role">Legacy <span class="shaan-dot">•</span> <span
+                          class="shaan-role-urdu">ورثہ</span></span>
+                      <h4 class="shaan-name">Late Aladeen Quraishi</h4>
+                    </div>
+                  </div>
+
+                  <!-- Slide 3 -->
+                  <div class="swiper-slide shaan-slide">
+                    <img src="assets/img/haji-wahid.WEBP" class="shaan-slide-img" alt="Late Haji Wahid Ali Quraishi">
+                    <div class="shaan-slide-content">
+                      <span class="shaan-role">Founder <span class="shaan-dot">•</span> <span
+                          class="shaan-role-urdu">بانی</span></span>
+                      <h4 class="shaan-name">Late Haji Wahid Ali Quraishi</h4>
+                    </div>
+                  </div>
+
+                  <!-- Slide 4 -->
+                  <div class="swiper-slide shaan-slide">
+                    <img src="assets/img/abid-ali.WEBP" class="shaan-slide-img" alt="Abid Ali Quraishi">
+                    <div class="shaan-slide-content">
+                      <span class="shaan-role">Director <span class="shaan-dot">•</span> <span
+                          class="shaan-role-urdu">سرپرست</span></span>
+                      <h4 class="shaan-name">Abid Ali Quraishi</h4>
+                    </div>
+                  </div>
+
+                  <!-- Slide 5: All four brothers (group photo yahan lagana) -->
+                  <div class="swiper-slide shaan-slide">
+                    <img src="assets/img/brother2.png" class="shaan-slide-img" alt="The Quraishi Brothers">
+                    <div class="shaan-slide-content">
+                      <span class="shaan-role">Next Gen <span class="shaan-dot">•</span> <span
+                          class="shaan-role-urdu">نسلِ نو</span></span>
+                      <h4 class="shaan-name shaan-name-group">The Quraishi Brothers</h4>
+                      <ul class="shaan-names">
+                        <li>M. Aqib Quraishi</li>
+                        <li>M. Saqib Quraishi</li>
+                        <li>M. Arbaaz Quraishi</li>
+                        <li>M. Saad Quraishi</li>
+                      </ul>
+                    </div>
+                  </div>
+
                 </div>
 
-                <!-- Slide 2 -->
-                <div class="swiper-slide shaan-slide">
-                  <img src="assets/img/aladeen.jpeg" class="shaan-slide-img" alt="Late Aladeen Quraishi">
-                  <div class="shaan-slide-content">
-                    <span class="shaan-role">Legacy <span class="shaan-dot">•</span> <span class="shaan-role-urdu">ورثہ</span></span>
-                    <h4 class="shaan-name">Late Aladeen Quraishi</h4>
-                  </div>
-                </div>
+                <div class="swiper-pagination shaan-pagination"></div>
+              </div>
 
-                <!-- Slide 3 -->
-                <div class="swiper-slide shaan-slide">
-                  <img src="assets/img/haji-wahid.WEBP" class="shaan-slide-img" alt="Late Haji Wahid Ali Quraishi">
-                  <div class="shaan-slide-content">
-                    <span class="shaan-role">Founder <span class="shaan-dot">•</span> <span class="shaan-role-urdu">بانی</span></span>
-                    <h4 class="shaan-name">Late Haji Wahid Ali Quraishi</h4>
-                  </div>
-                </div>
+            </div>
 
-                <!-- Slide 4 -->
-                <div class="swiper-slide shaan-slide">
-                  <img src="assets/img/abid-ali.WEBP" class="shaan-slide-img" alt="Abid Ali Quraishi">
-                  <div class="shaan-slide-content">
-                    <span class="shaan-role">Director <span class="shaan-dot">•</span> <span class="shaan-role-urdu">سرپرست</span></span>
-                    <h4 class="shaan-name">Abid Ali Quraishi</h4>
-                  </div>
-                </div>
+          </div>
+        </div>
 
-                <!-- Slide 5: All four brothers (group photo yahan lagana) -->
-                <div class="swiper-slide shaan-slide">
-                  <img src="assets/img/brother2.png" class="shaan-slide-img" alt="The Quraishi Brothers">
-                  <div class="shaan-slide-content">
-                    <span class="shaan-role">Next Gen <span class="shaan-dot">•</span> <span class="shaan-role-urdu">نسلِ نو</span></span>
-                    <h4 class="shaan-name shaan-name-group">The Quraishi Brothers</h4>
-                    <ul class="shaan-names">
+        <!-- Column 3: Lineage Names Swiper (no image) -->
+        <div class="col-lg-4 col-md-4 col-12 text-center reveal-up" style="transition-delay: 0.4s;">
+          <div class="shaan-arch-wrapper w-100">
+            <div class="shaan-arch-border"></div>
+
+            <div class="shaan-arch-inner lineage-arch mx-auto p-0 overflow-hidden text-center"
+              style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
+
+              <!-- Fixed heading -->
+              <div class="lineage-head">
+                <h3 class="lineage-head-title">Our Culinary Lineage</h3>
+                <span class="lineage-head-urdu">سلسلۂ طباخی</span>
+              </div>
+
+              <!-- Vertical Swiper -->
+              <div class="swiper lineage-swiper">
+                <div class="swiper-wrapper">
+
+                  <!-- Slide 1 -->
+                  <div class="swiper-slide lineage-slide">
+                    <span class="lineage-role">Legacy <span class="lineage-dot">•</span> <span
+                        class="lineage-role-urdu">ورثہ</span></span>
+                    <h4 class="lineage-name">Late Chaudhary Mohammadu Quraishi</h4>
+                    <p class="lineage-desc">The roots of our culinary legacy</p>
+                  </div>
+
+                  <!-- Slide 2 -->
+                  <div class="swiper-slide lineage-slide">
+                    <span class="lineage-role">Legacy <span class="lineage-dot">•</span> <span
+                        class="lineage-role-urdu">ورثہ</span></span>
+                    <h4 class="lineage-name">Late Aladeen Quraishi</h4>
+                    <p class="lineage-desc">Carried the family legacy forward</p>
+                  </div>
+
+                  <!-- Slide 3 -->
+                  <div class="swiper-slide lineage-slide">
+                    <span class="lineage-role">Founder <span class="lineage-dot">•</span> <span
+                        class="lineage-role-urdu">بانی</span></span>
+                    <h4 class="lineage-name">Late Haji Wahid Ali Quraishi</h4>
+                    <p class="lineage-desc">1955 — Pioneer of Aminabad Biryani</p>
+                  </div>
+
+                  <!-- Slide 4 -->
+                  <div class="swiper-slide lineage-slide">
+                    <span class="lineage-role">Director <span class="lineage-dot">•</span> <span
+                        class="lineage-role-urdu">سرپرست</span></span>
+                    <h4 class="lineage-name">Abid Ali Quraishi</h4>
+                    <p class="lineage-desc">Custodian &amp; Master Blender of Recipes</p>
+                  </div>
+
+                  <!-- Slide 5: all brothers together -->
+                  <div class="swiper-slide lineage-slide">
+                    <span class="lineage-role">Next Gen <span class="lineage-dot">•</span> <span
+                        class="lineage-role-urdu">نسلِ نو</span></span>
+                    <h4 class="lineage-name">The Quraishi Brothers</h4>
+                    <ul class="lineage-names">
                       <li>M. Aqib Quraishi</li>
                       <li>M. Saqib Quraishi</li>
                       <li>M. Arbaaz Quraishi</li>
                       <li>M. Saad Quraishi</li>
                     </ul>
+                    <p class="lineage-desc">Carrying the Flame &amp; Kitchen Ethos Today</p>
                   </div>
+
                 </div>
 
+                <div class="swiper-pagination lineage-pagination"></div>
               </div>
 
-              <div class="swiper-pagination shaan-pagination"></div>
             </div>
 
           </div>
-
         </div>
+
       </div>
-
-      <!-- Column 3: Lineage Names Swiper (no image) -->
-      <div class="col-lg-4 col-md-4 col-12 text-center reveal-up" style="transition-delay: 0.4s;">
-        <div class="shaan-arch-wrapper w-100">
-          <div class="shaan-arch-border"></div>
-
-          <div class="shaan-arch-inner lineage-arch mx-auto p-0 overflow-hidden text-center"
-            style="background: var(--color-primary) !important; width: 100%; max-width: 360px;">
-
-            <!-- Fixed heading -->
-            <div class="lineage-head">
-              <h3 class="lineage-head-title">Our Culinary Lineage</h3>
-              <span class="lineage-head-urdu">سلسلۂ طباخی</span>
-            </div>
-
-            <!-- Vertical Swiper -->
-            <div class="swiper lineage-swiper">
-              <div class="swiper-wrapper">
-
-                <!-- Slide 1 -->
-                <div class="swiper-slide lineage-slide">
-                  <span class="lineage-role">Legacy <span class="lineage-dot">•</span> <span class="lineage-role-urdu">ورثہ</span></span>
-                  <h4 class="lineage-name">Late Chaudhary Mohammadu Quraishi</h4>
-                  <p class="lineage-desc">The roots of our culinary legacy</p>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="swiper-slide lineage-slide">
-                  <span class="lineage-role">Legacy <span class="lineage-dot">•</span> <span class="lineage-role-urdu">ورثہ</span></span>
-                  <h4 class="lineage-name">Late Aladeen Quraishi</h4>
-                  <p class="lineage-desc">Carried the family legacy forward</p>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="swiper-slide lineage-slide">
-                  <span class="lineage-role">Founder <span class="lineage-dot">•</span> <span class="lineage-role-urdu">بانی</span></span>
-                  <h4 class="lineage-name">Late Haji Wahid Ali Quraishi</h4>
-                  <p class="lineage-desc">1955 — Pioneer of Aminabad Biryani</p>
-                </div>
-
-                <!-- Slide 4 -->
-                <div class="swiper-slide lineage-slide">
-                  <span class="lineage-role">Director <span class="lineage-dot">•</span> <span class="lineage-role-urdu">سرپرست</span></span>
-                  <h4 class="lineage-name">Abid Ali Quraishi</h4>
-                  <p class="lineage-desc">Custodian &amp; Master Blender of Recipes</p>
-                </div>
-
-                <!-- Slide 5: all brothers together -->
-                <div class="swiper-slide lineage-slide">
-                  <span class="lineage-role">Next Gen <span class="lineage-dot">•</span> <span class="lineage-role-urdu">نسلِ نو</span></span>
-                  <h4 class="lineage-name">The Quraishi Brothers</h4>
-                  <ul class="lineage-names">
-                    <li>M. Aqib Quraishi</li>
-                    <li>M. Saqib Quraishi</li>
-                    <li>M. Arbaaz Quraishi</li>
-                    <li>M. Saad Quraishi</li>
-                  </ul>
-                  <p class="lineage-desc">Carrying the Flame &amp; Kitchen Ethos Today</p>
-                </div>
-
-              </div>
-
-              <div class="swiper-pagination lineage-pagination"></div>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- Horizontal Scroll: The Royal Dastarkhwan (Highlights & Features) -->
   <section class="royal-dastarkhwan-section bg-cream">
@@ -469,7 +335,7 @@
     <div class="royal-dastarkhwan-header text-center">
       <div class="section-title-wrapper mb-0">
         <span class="urdu-accent">دسترخوان اودھ</span>
-        <h2 class="section-title">The Royal Dastarkhwan <br/> By Wahid Biryani</h2>
+        <h2 class="section-title">The Royal Dastarkhwan <br /> By Wahid Biryani</h2>
         <p class="section-desc mb-0">Scroll vertically to unfold the core highlights and features of our culinary
           execution.</p>
       </div>
@@ -571,145 +437,143 @@
     </div>
   </section>
 
-
-<!-- Signature Dishes Showcase (Royal Awadhi Card Grid) -->
-<section class="section-padding bg-cream position-relative overflow-hidden" id="signature">
-  <!-- Architectural Ornaments (Pure CSS to avoid raster artifacts) -->
-  <div
-    style="position: absolute; left: -20px; top: 10%; width: 100px; height: 80%; border-right: 5px double var(--color-accent); border-radius: 0 50% 50% 0; opacity: 0.3; pointer-events: none;">
-  </div>
-  <div
-    style="position: absolute; right: -20px; top: 10%; width: 100px; height: 80%; border-left: 5px double var(--color-accent); border-radius: 50% 0 0 50%; opacity: 0.3; pointer-events: none;">
-  </div>
-
-  <div class="sig-jaali-overlay"></div>
-
-  <div class="container position-relative" style="z-index: 2;">
-    <div class="section-title-wrapper">
-      <span class="urdu-accent">روایتی پکوان</span>
-      <h2 class="section-title">Signature Dishes Selection</h2>
-      <p class="section-desc">Seven highlights from the legendary dastarkhwan of Wahid Biryani.</p>
+  <!-- Signature Dishes Showcase (Royal Awadhi Card Grid) -->
+  <section class="section-padding bg-cream position-relative overflow-hidden" id="signature">
+    <!-- Architectural Ornaments (Pure CSS to avoid raster artifacts) -->
+    <div
+      style="position: absolute; left: -20px; top: 10%; width: 100px; height: 80%; border-right: 5px double var(--color-accent); border-radius: 0 50% 50% 0; opacity: 0.3; pointer-events: none;">
+    </div>
+    <div
+      style="position: absolute; right: -20px; top: 10%; width: 100px; height: 80%; border-left: 5px double var(--color-accent); border-radius: 50% 0 0 50%; opacity: 0.3; pointer-events: none;">
     </div>
 
-    <div class="signature-grid">
+    <div class="sig-jaali-overlay"></div>
 
-      <!-- Card 1: Biryani (Full Width Feature) -->
-      <div class="sig-card sig-card-featured reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/chicken_biryani.jpeg" alt="Wahid Chicken Biryani">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">01</span>
-        </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">واحد خاص بریانی</span>
-          <h3 class="sig-card-title">Wahid Special Biryani</h3>
-          <p class="sig-card-desc">Our signature biryani, served since 1955 and loved across Lucknow. Choose from
-            Chicken, Mutton, Paneer and Egg biryani, cooked with the same recipe and the same care for four
-            generations.</p>
-       
-          <a href="menu.html#biryani" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="section-title-wrapper">
+        <span class="urdu-accent">روایتی پکوان</span>
+        <h2 class="section-title">Signature Dishes Selection</h2>
+        <p class="section-desc">Seven highlights from the legendary dastarkhwan of Wahid Biryani.</p>
       </div>
 
-      <!-- Card 2: Mughlai (Chicken Main Course) -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/chicken_kari.jpeg" alt="Chicken Main Course">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">02</span>
-        </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">مغلئی ذائقے</span>
-          <h3 class="sig-card-title">Mughlai Delicacies</h3>
-          <p class="sig-card-desc">Rich Mughlai gravies in Chicken Korma, Masala, Curry, Butter, Kali Mirch and
-            Changezi, with boneless options too. Perfect with fresh breads.</p>
-          <a href="menu.html#mughlai" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
+      <div class="signature-grid">
 
-      <!-- Card 3: Lucknowi Dastarkhwan (Mutton Main Course) -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/lucknowi_dastarkhwan.png" alt="Lucknowi Dastarkhwan">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">03</span>
-        </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">لکھنوی دسترخوان</span>
-          <h3 class="sig-card-title">Lucknowi Dastarkhwan</h3>
-          <p class="sig-card-desc">A full mutton spread of Korma, Masala, Curry, Butter, Kali Mirch and Changezi,
-            along with classic Kaleji and Bheja Fry.</p>
-          <a href="menu.html#mutton" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
+        <!-- Card 1: Biryani (Full Width Feature) -->
+        <div class="sig-card sig-card-featured reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/chicken_biryani.jpeg" alt="Wahid Chicken Biryani">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">01</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">واحد خاص بریانی</span>
+            <h3 class="sig-card-title">Wahid Special Biryani</h3>
+            <p class="sig-card-desc">Our signature biryani, served since 1955 and loved across Lucknow. Choose from
+              Chicken, Mutton, Paneer and Egg biryani, cooked with the same recipe and the same care for four
+              generations.</p>
 
-      <!-- Card 4: Kababs & Tikkas -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/mutton_galavati_kabab.jpeg" alt="Kababs & Tikkas">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">04</span>
+            <a href="{{ route('menu') }}#biryani" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
         </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">کباب اور تکہ</span>
-          <h3 class="sig-card-title">Kababs &amp; Tikkas</h3>
-          <p class="sig-card-desc">Soft Mutton Galawati, Shami and Seekh kababs, along with Chicken Reshmi, Malai
-            and Green Tikka from our starters.</p>
-          <a href="menu.html#kebabs" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
 
-      <!-- Card 5: Desserts -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/shahi_tukda.jpg" alt="Shahi Tukda">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">05</span>
+        <!-- Card 2: Mughlai (Chicken Main Course) -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/chicken_kari.jpeg" alt="Chicken Main Course">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">02</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">مغلئی ذائقے</span>
+            <h3 class="sig-card-title">Mughlai Delicacies</h3>
+            <p class="sig-card-desc">Rich Mughlai gravies in Chicken Korma, Masala, Curry, Butter, Kali Mirch and
+              Changezi, with boneless options too. Perfect with fresh breads.</p>
+            <a href="{{ route('menu') }}#mughlai" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
         </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">شاہی میٹھا</span>
-          <h3 class="sig-card-title">Traditional Desserts</h3>
-          <p class="sig-card-desc">End your meal the royal way with Shahi Tukda, Zafrani Kheer or Gulab Jamun.</p>
-          <a href="menu.html#desserts" class="sig-card-link">View Full Menu <i
-              class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
 
-      <!-- Card 6: Mutton Boti Kabab -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/mutton_boti_kabab.jpeg" alt="Mutton Boti Kabab">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">06</span>
+        <!-- Card 3: Lucknowi Dastarkhwan (Mutton Main Course) -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/lucknowi_dastarkhwan.png" alt="Lucknowi Dastarkhwan">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">03</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">لکھنوی دسترخوان</span>
+            <h3 class="sig-card-title">Lucknowi Dastarkhwan</h3>
+            <p class="sig-card-desc">A full mutton spread of Korma, Masala, Curry, Butter, Kali Mirch and Changezi,
+              along with classic Kaleji and Bheja Fry.</p>
+            <a href="{{ route('menu') }}#mutton" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
         </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">بوٹی کباب</span>
-          <h3 class="sig-card-title">Mutton Boti Kabab</h3>
-          <p class="sig-card-desc">Juicy mutton boti kababs, a favourite starter and a perfect partner for our
-            biryani and rumali roti.</p>
-          <a href="menu.html#kebabs" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
 
-      <!-- Card 7: Breads -->
-      <div class="sig-card reveal-scale">
-        <div class="sig-card-img-wrapper">
-          <img loading="lazy" src="assets/img/muglai_kabab_paratha.jpeg" alt="Mughlai Paratha and Breads">
-          <div class="sig-card-overlay"></div>
-          <span class="sig-card-number">07</span>
+        <!-- Card 4: Kababs & Tikkas -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/mutton_galavati_kabab.jpeg" alt="Kababs & Tikkas">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">04</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">کباب اور تکہ</span>
+            <h3 class="sig-card-title">Kababs &amp; Tikkas</h3>
+            <p class="sig-card-desc">Soft Mutton Galawati, Shami and Seekh kababs, along with Chicken Reshmi, Malai
+              and Green Tikka from our starters.</p>
+            <a href="{{ route('menu') }}#kebabs" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
         </div>
-        <div class="sig-card-body">
-          <span class="dish-urdu">شاہی روٹی</span>
-          <h3 class="sig-card-title">Royal Breads</h3>
-          <p class="sig-card-desc">Mughlai Paratha, Rumali Roti, Sheermal, Kulcha and Naan, made fresh to go
-            with our gravies and kababs.</p>
-          <a href="menu.html#breads" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
 
+        <!-- Card 5: Desserts -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/shahi_tukda.jpg" alt="Shahi Tukda">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">05</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">شاہی میٹھا</span>
+            <h3 class="sig-card-title">Traditional Desserts</h3>
+            <p class="sig-card-desc">End your meal the royal way with Shahi Tukda, Zafrani Kheer or Gulab Jamun.</p>
+            <a href="{{ route('menu') }}#desserts" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Card 6: Mutton Boti Kabab -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/mutton_boti_kabab.jpeg" alt="Mutton Boti Kabab">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">06</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">بوٹی کباب</span>
+            <h3 class="sig-card-title">Mutton Boti Kabab</h3>
+            <p class="sig-card-desc">Juicy mutton boti kababs, a favourite starter and a perfect partner for our
+              biryani and rumali roti.</p>
+            <a href="{{ route('menu') }}#kebabs" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Card 7: Breads -->
+        <div class="sig-card reveal-scale">
+          <div class="sig-card-img-wrapper">
+            <img loading="lazy" src="assets/img/muglai_kabab_paratha.jpeg" alt="Mughlai Paratha and Breads">
+            <div class="sig-card-overlay"></div>
+            <span class="sig-card-number">07</span>
+          </div>
+          <div class="sig-card-body">
+            <span class="dish-urdu">شاہی روٹی</span>
+            <h3 class="sig-card-title">Royal Breads</h3>
+            <p class="sig-card-desc">Mughlai Paratha, Rumali Roti, Sheermal, Kulcha and Naan, made fresh to go
+              with our gravies and kababs.</p>
+            <a href="{{ route('menu') }}#breads" class="sig-card-link">View Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Tehzeeb & Adab Section (Green Theme) -->
   <section class="tehzeeb-section">
@@ -747,8 +611,8 @@
           <div class="d-flex align-items-center gap-4 mt-5">
             <div class="gold-stamp flex-shrink-0">
               <span class="d-block font-display fs-4 text-white">70+</span>
-              <span class="text-accent"
-                style="font-size: 0.70rem; text-transform: uppercase; letter-spacing: 2px;">Years of<br>Tradition</span>
+              <span class="text-accent" style="font-size: 0.70rem; text-transform: uppercase; letter-spacing: 2px;">Years
+                of<br>Tradition</span>
             </div>
             <div class="border-start border-accent opacity-50" style="height: 60px;"></div>
             <p class="font-display italic text-accent mb-0"
@@ -762,73 +626,74 @@
   </section>
 
   <!-- Featured Menu Grid ("Kuchh Menu's dikhane hai") -->
- <section class="section-padding bg-ivory" id="menu-teaser">
-  <div class="container">
-    <div class="section-title-wrapper">
-      <span class="urdu-accent">دسترخوان کا انتخاب</span>
-      <h2 class="section-title">Highlights from the Menu</h2>
-      <p class="section-desc">A glimpse of the handpicked delicacies loved by our patrons.</p>
-    </div>
+  <section class="section-padding bg-ivory" id="menu-teaser">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="urdu-accent">دسترخوان کا انتخاب</span>
+        <h2 class="section-title">Highlights from the Menu</h2>
+        <p class="section-desc">A glimpse of the handpicked delicacies loved by our patrons.</p>
+      </div>
 
-    <div class="row g-3 g-md-4 justify-content-center">
+      <div class="row g-3 g-md-4 justify-content-center">
 
-      <!-- Item 1: Wahid Chicken Biryani -->
-      <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
-        <div class="royal-parchment-card story-card h-100">
-          <div>
-            <div class="royal-image-frame" style="aspect-ratio: 4/3;">
-              <img loading="lazy" src="assets/img/chicken_biryani.jpeg" alt="Wahid Chicken Biryani">
+        <!-- Item 1: Wahid Chicken Biryani -->
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
+          <div class="royal-parchment-card story-card h-100">
+            <div>
+              <div class="royal-image-frame" style="aspect-ratio: 4/3;">
+                <img loading="lazy" src="assets/img/chicken_biryani.jpeg" alt="Wahid Chicken Biryani">
+              </div>
+              <div class="d-flex justify-content-between align-items-baseline mb-2">
+                <h4 class="font-display text-primary fs-5 mb-0">Wahid Chicken Biryani</h4>
+                <span class="font-display text-accent fw-600">₹180</span>
+              </div>
+              <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">Our
+                signature biryani, served since 1955. Half plate with 2 pieces of chicken.</p>
             </div>
-            <div class="d-flex justify-content-between align-items-baseline mb-2">
-              <h4 class="font-display text-primary fs-5 mb-0">Wahid Chicken Biryani</h4>
-              <span class="font-display text-accent fw-600">₹180</span>
+          </div>
+        </div>
+
+        <!-- Item 2: Mutton Galawati Kabab -->
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
+          <div class="royal-parchment-card story-card h-100">
+            <div>
+              <div class="royal-image-frame" style="aspect-ratio: 4/3;">
+                <img loading="lazy" src="assets/img/mutton_galavati_kabab.jpeg" alt="Mutton Galawati Kabab">
+              </div>
+              <div class="d-flex justify-content-between align-items-baseline mb-2">
+                <h4 class="font-display text-primary fs-5 mb-0">Mutton Galawati Kabab</h4>
+                <span class="font-display text-accent fw-600">₹190</span>
+              </div>
+              <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">Soft,
+                melt-in-your-mouth Lucknowi galawati kababs. One plate with 4 pieces.</p>
             </div>
-            <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">Our
-              signature biryani, served since 1955. Half plate with 2 pieces of chicken.</p>
+          </div>
+        </div>
+
+        <!-- Item 3: Shahi Tukda -->
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
+          <div class="royal-parchment-card story-card h-100">
+            <div>
+              <div class="royal-image-frame" style="aspect-ratio: 4/3;">
+                <img loading="lazy" src="assets/img/shahi_tukda.jpg" alt="Shahi Tukda">
+              </div>
+              <div class="d-flex justify-content-between align-items-baseline mb-2">
+                <h4 class="font-display text-primary fs-5 mb-0">Shahi Tukda</h4>
+                <span class="font-display text-accent fw-600">₹90</span>
+              </div>
+              <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">The
+                classic royal dessert of Lucknow, the perfect sweet end to your meal.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Item 2: Mutton Galawati Kabab -->
-      <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
-        <div class="royal-parchment-card story-card h-100">
-          <div>
-            <div class="royal-image-frame" style="aspect-ratio: 4/3;">
-              <img loading="lazy" src="assets/img/mutton_galavati_kabab.jpeg" alt="Mutton Galawati Kabab">
-            </div>
-            <div class="d-flex justify-content-between align-items-baseline mb-2">
-              <h4 class="font-display text-primary fs-5 mb-0">Mutton Galawati Kabab</h4>
-              <span class="font-display text-accent fw-600">₹190</span>
-            </div>
-            <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">Soft,
-              melt-in-your-mouth Lucknowi galawati kababs. One plate with 4 pieces.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Item 3: Shahi Tukda -->
-      <div class="col-lg-4 col-md-6 col-sm-6 col-12 reveal-scale">
-        <div class="royal-parchment-card story-card h-100">
-          <div>
-            <div class="royal-image-frame" style="aspect-ratio: 4/3;">
-              <img loading="lazy" src="assets/img/shahi_tukda.jpg" alt="Shahi Tukda">
-            </div>
-            <div class="d-flex justify-content-between align-items-baseline mb-2">
-              <h4 class="font-display text-primary fs-5 mb-0">Shahi Tukda</h4>
-              <span class="font-display text-accent fw-600">₹90</span>
-            </div>
-            <p class="font-body mb-0" style="font-size: 0.85rem; color: var(--color-text); opacity: 0.85;">The
-              classic royal dessert of Lucknow, the perfect sweet end to your meal.</p>
-          </div>
-        </div>
+      <div class="text-center mt-5 reveal-up">
+        <a href="{{ route('menu') }}" class="btn btn-burgundy-fill magnetic-btn">View Entire Dastarkhwan Menu</a>
       </div>
     </div>
+  </section>
 
-    <div class="text-center mt-5 reveal-up">
-      <a href="menu.html" class="btn btn-burgundy-fill magnetic-btn">View Entire Dastarkhwan Menu</a>
-    </div>
-  </div>
-</section>
   <!-- Awards & Recognitions Section -->
   <section class="section-padding position-relative overflow-hidden" id="awards"
     style="background-color: #F4EBD7; z-index: 1;">
@@ -893,9 +758,10 @@
         <span class="urdu-accent reveal-up">روایتی جھلکیاں</span>
         <h2 class="section-title split-words">Heritage Reels & Stories</h2>
         <p class="section-desc reveal-up mx-auto" style="max-width: 620px;">
-          Experience the live sizzle of our charcoal sigris, the aroma of sealing dum handis, and authentic kitchen traditions in motion.
+          Experience the live sizzle of our charcoal sigris, the aroma of sealing dum handis, and authentic kitchen
+          traditions in motion.
         </p>
-        
+
         <!-- Royal Gold Delicate Ornament -->
         <div class="hero-ornament reveal-up my-3" style="opacity: 1; transform: none;">
           <svg width="220" height="20" viewBox="0 0 220 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -907,18 +773,20 @@
 
       <!-- 4 Reels Responsive Grid: >=1280px (4 cards), 1024px-1279px (2 cards), mobile (2/1 cards) -->
       <div class="reels-grid">
-        
+
         <!-- Reel 1 -->
         <div class="reel-card-item reveal-scale">
           <div class="reel-card" data-reel-id="reel-1">
             <div class="reel-thumbnail-wrap">
-              <img loading="lazy" src="assets/video/poster/insta1.png" alt="The 70-Year Sigri Dum Magic" class="reel-poster">
-              <video class="reel-video" muted playsinline loop preload="metadata" poster="assets/img/chicken_biryani.jpeg">
+              <img loading="lazy" src="assets/video/poster/insta1.png" alt="The 70-Year Sigri Dum Magic"
+                class="reel-poster">
+              <video class="reel-video" muted playsinline loop preload="metadata"
+                poster="assets/img/chicken_biryani.jpeg">
                 <source src="assets/video/insta1.mp4" type="video/mp4">
               </video>
             </div>
             <div class="reel-overlay"></div>
-            
+
             <div class="reel-top-bar">
               <span class="reel-badge-pill">
                 <i class="fa-brands fa-instagram text-accent"></i> Reel
@@ -944,7 +812,8 @@
               <h3 class="reel-title">The 70-Year Dum Magic</h3>
               <div class="reel-meta-row">
                 <span>0:45 • Aminabad Flagship</span>
-                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1" style="font-size: 0.65rem;"></i></span>
+                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1"
+                    style="font-size: 0.65rem;"></i></span>
               </div>
             </div>
 
@@ -956,13 +825,15 @@
         <div class="reel-card-item reveal-scale" style="transition-delay: 0.15s;">
           <div class="reel-card" data-reel-id="reel-2">
             <div class="reel-thumbnail-wrap">
-               <img loading="lazy" src="assets/video/poster/insta2.png" alt="The 70-Year Sigri Dum Magic" class="reel-poster">
-              <video class="reel-video" muted playsinline loop preload="metadata" poster="assets/img/chicken_biryani.jpeg">
+              <img loading="lazy" src="assets/video/poster/insta2.png" alt="The 70-Year Sigri Dum Magic"
+                class="reel-poster">
+              <video class="reel-video" muted playsinline loop preload="metadata"
+                poster="assets/img/chicken_biryani.jpeg">
                 <source src="assets/video/insta2.mp4" type="video/mp4">
               </video>
             </div>
             <div class="reel-overlay"></div>
-            
+
             <div class="reel-top-bar">
               <span class="reel-badge-pill">
                 <i class="fa-brands fa-instagram text-accent"></i> Reel
@@ -988,7 +859,8 @@
               <h3 class="reel-title">Secret Spices in Copper Handi</h3>
               <div class="reel-meta-row">
                 <span>0:38 • Heritage Recipe</span>
-                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1" style="font-size: 0.65rem;"></i></span>
+                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1"
+                    style="font-size: 0.65rem;"></i></span>
               </div>
             </div>
 
@@ -1000,13 +872,15 @@
         <div class="reel-card-item reveal-scale" style="transition-delay: 0.3s;">
           <div class="reel-card" data-reel-id="reel-3">
             <div class="reel-thumbnail-wrap">
-              <img loading="lazy" src="assets/video/poster/insta3.png" alt="The 70-Year Sigri Dum Magic" class="reel-poster">
-              <video class="reel-video" muted playsinline loop preload="metadata" poster="assets/img/chicken_biryani.jpeg">
+              <img loading="lazy" src="assets/video/poster/insta3.png" alt="The 70-Year Sigri Dum Magic"
+                class="reel-poster">
+              <video class="reel-video" muted playsinline loop preload="metadata"
+                poster="assets/img/chicken_biryani.jpeg">
                 <source src="assets/video/insta3.mp4" type="video/mp4">
               </video>
             </div>
             <div class="reel-overlay"></div>
-            
+
             <div class="reel-top-bar">
               <span class="reel-badge-pill">
                 <i class="fa-brands fa-instagram text-accent"></i> Reel
@@ -1032,7 +906,8 @@
               <h3 class="reel-title">Galavati on Live Charcoal</h3>
               <div class="reel-meta-row">
                 <span>0:52 • Live Kitchen</span>
-                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1" style="font-size: 0.65rem;"></i></span>
+                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1"
+                    style="font-size: 0.65rem;"></i></span>
               </div>
             </div>
 
@@ -1044,13 +919,15 @@
         <div class="reel-card-item reveal-scale" style="transition-delay: 0.45s;">
           <div class="reel-card" data-reel-id="reel-4">
             <div class="reel-thumbnail-wrap">
-              <img loading="lazy" src="assets/video/poster/insta4.png" alt="The 70-Year Sigri Dum Magic" class="reel-poster">
-              <video class="reel-video" muted playsinline loop preload="metadata" poster="assets/img/chicken_biryani.jpeg">
+              <img loading="lazy" src="assets/video/poster/insta4.png" alt="The 70-Year Sigri Dum Magic"
+                class="reel-poster">
+              <video class="reel-video" muted playsinline loop preload="metadata"
+                poster="assets/img/chicken_biryani.jpeg">
                 <source src="assets/video/insta4.mp4" type="video/mp4">
               </video>
             </div>
             <div class="reel-overlay"></div>
-            
+
             <div class="reel-top-bar">
               <span class="reel-badge-pill">
                 <i class="fa-brands fa-instagram text-accent"></i> Reel
@@ -1076,7 +953,8 @@
               <h3 class="reel-title">Royal Ulta Tawa Paratha</h3>
               <div class="reel-meta-row">
                 <span>0:41 • Master Chefs</span>
-                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1" style="font-size: 0.65rem;"></i></span>
+                <span class="reel-watch-cta">Watch <i class="fa-solid fa-chevron-right ms-1"
+                    style="font-size: 0.65rem;"></i></span>
               </div>
             </div>
 
@@ -1088,7 +966,7 @@
 
       <!-- CTA to Video Gallery -->
       <div class="text-center mt-5 reveal-up">
-        <a href="video-gallery.html" class="btn btn-gold-outline magnetic-btn">
+        <a href="{{ route('video-gallery') }}" class="btn btn-gold-outline magnetic-btn">
           <i class="fa-solid fa-film me-2"></i> Explore All Video Stories
         </a>
       </div>
@@ -1168,8 +1046,7 @@
       <svg width="600" height="280" viewBox="0 0 600 280" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 270V160C20 160 50 80 150 80C210 80 250 20 300 5C350 20 390 80 450 80C550 80 580 160 580 270"
           stroke="#C49A45" stroke-width="3" stroke-linecap="round" fill="none" />
-        <path
-          d="M70 270V190C70 190 100 120 180 120C230 120 260 60 300 40C340 60 370 120 420 120C500 120 530 190 530 270"
+        <path d="M70 270V190C70 190 100 120 180 120C230 120 260 60 300 40C340 60 370 120 420 120C500 120 530 190 530 270"
           stroke="#C49A45" stroke-width="1.5" stroke-dasharray="4 4" fill="none" />
         <circle cx="300" cy="35" r="8" fill="#C49A45" />
       </svg>
@@ -1190,15 +1067,12 @@
         </p>
 
         <div class="d-flex gap-3 justify-content-center flex-wrap reveal-up pt-2">
-          <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal" class="btn btn-burgundy-fill magnetic-btn">Order Food Online</a>
-          <a href="contact.html" class="btn btn-gold-outline magnetic-btn">Visit Our Outlets</a>
+          <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
+            class="btn btn-burgundy-fill magnetic-btn">Order Food Online</a>
+          <a href="{{ route('contact') }}" class="btn btn-gold-outline magnetic-btn">Visit Our Outlets</a>
         </div>
       </div>
     </div>
   </section>
 
-
 @endsection
-
-@push('scripts')
-@endpush

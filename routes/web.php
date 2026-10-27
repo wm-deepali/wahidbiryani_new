@@ -5,14 +5,20 @@ use App\Http\Controllers\Admin\{
     SeoController,
     BlogController,
     LogoutController,
+    OutletController,
+    FeedbackController,
+    MenuItemController,
     RedirectController,
     SystemLogController,
     DashboardController,
     NotificationController,
+    MenuCategoryController,
     AdminSettingController,
     EmailTemplateController,
     ContactEnquiryController,
     ProfileSettingController,
+    FranchiseEnquiryController
+
 
 };
 
@@ -25,10 +31,32 @@ Route::middleware('maintenance.mode')->group(function () {
 
     Route::controller(FrontController::class)->group(function () {
         Route::get('/', 'home')->name('home');
-        
-    });
+        Route::get('/faq', 'faqs')->name('faq');
+        Route::get('/menu', 'menu')->name('menu');
+        Route::get('/blogs', 'blogs')->name('blogs');
+        Route::get('/contact', 'contact')->name('contact');
+        Route::get('/blog/{slug}', 'blogDetail')->name('blog-detail');
+        Route::get('/feedback', 'feedback')->name('feedback');
+        Route::get('/franchise', 'franchise')->name('franchise');
+        Route::post('/contact', 'storeContact')->middleware('throttle:5,1')->name('contact.submit');
+        Route::post('/feedback', 'storeFeedback')->middleware('throttle:5,1')->name('feedback.submit');
+        Route::post('/franchise', 'storeFranchiseEnquiry')->middleware('throttle:5,1')->name('franchise.submit');
 
+        Route::view('/awards', 'front-pages.awards')->name('awards');
+        Route::view('/director-message', 'front-pages.director-message')->name('director-message');
+        Route::view('/image-gallery', 'front-pages.image-gallery')->name('image-gallery');
+        Route::view('/our-outlets', 'front-pages.our-outlets')->name('our-outlets');
+        Route::view('/our-story', 'front-pages.our-story')->name('our-story');
+        Route::view('/signature-dishes', 'front-pages.signature-dishes')->name('signature-dishes');
+        Route::view('/video-gallery', 'front-pages.video-gallery')->name('video-gallery');
+        Route::view('/wahid-legacy', 'front-pages.wahid-legacy')->name('wahid-legacy');
+
+
+    });
+    
 });
+
+
 
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -49,9 +77,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('faqs', FaqController::class)->names('faqs');
 
         Route::resource('blogs', BlogController::class)->names('blogs');
-        
-        Route::resource('enquiries', ContactEnquiryController::class)->only(['index', 'show', 'update', 'destroy'])->parameters(['enquiries' => 'enquiry']);
-   
+
+        Route::resource('outlets', OutletController::class)->except(['show']);
+        Route::resource('contact-enquiries', ContactEnquiryController::class)->only(['index', 'show', 'destroy']);
+
+        Route::resource('menu-categories', MenuCategoryController::class)->except(['show']);
+        Route::resource('menu-items', MenuItemController::class)->except(['show']);
+
+        Route::resource('feedbacks', FeedbackController::class)->only(['index', 'show', 'destroy']);
+        Route::resource('franchise-enquiries', FranchiseEnquiryController::class)->only(['index', 'show', 'destroy']);
+
         Route::get('/seo', [SeoController::class, 'index'])->name('seo.index');
         Route::put('/seo/{id}', [SeoController::class, 'update'])->name('seo.update');
 
@@ -73,6 +108,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/settings/general', [AdminSettingController::class, 'generalSettingStore'])->name('settings.general.store');
         Route::post('admin-setting/google-setting', [AdminSettingController::class, 'googleSettingStore'])->name('admin-setting.google-setting');
 
+        Route::get('settings/email-templates', [EmailTemplateController::class, 'getData'])->name('settings.email-templates.index');
         Route::post('settings/email-templates/test', [EmailTemplateController::class, 'sendTest'])->name('settings.email-templates.test');
         Route::post('settings/email-templates/{eventKey}', [EmailTemplateController::class, 'save'])->name('settings.email-templates.save');
 

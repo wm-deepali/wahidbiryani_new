@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('franchise_enquiries', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('phone', 30);
+            $table->string('email');
+            $table->string('city');
+            $table->string('budget', 60);               // selected option text, e.g. "25 - 50 Lakhs"
+            $table->text('message');                    // background / experience
+            $table->string('ip_address', 45)->nullable();
+            $table->boolean('is_read')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('franchise_enquiries');
+    }
+};

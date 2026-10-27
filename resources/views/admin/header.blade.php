@@ -47,14 +47,27 @@
             </a>
         </li>
 
+        {{-- MENU MANAGEMENT --}}
+        <li class="{{ request()->routeIs('admin.menu-categories.*', 'admin.menu-items.*') ? 'active' : '' }}">
+            <a href="#"><i class="fa-solid fa-utensils"></i> Menu Management</a>
+            <ul>
+                <li class="{{ request()->routeIs('admin.menu-categories.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.menu-categories.index') }}">Menu Categories</a>
+                </li>
+                <li class="{{ request()->routeIs('admin.menu-items.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.menu-items.index') }}">Menu Items</a>
+                </li>
+            </ul>
+        </li>
+
         {{-- CONTENT MANAGEMENT --}}
-        <li
-            class="{{ request()->routeIs(
-                'admin.faqs.*',
-                'admin.blogs.*',
-            )
-                ? 'active'
-                : '' }}">
+        <li class="{{ request()->routeIs(
+    'admin.faqs.*',
+    'admin.blogs.*',
+    'admin.outlets.*',
+)
+    ? 'active'
+    : '' }}">
             <a href="#"><i class="fa-solid fa-file-lines"></i> Content Management</a>
             <ul>
                 <li class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
@@ -63,21 +76,30 @@
                 <li class="{{ request()->routeIs('admin.blogs.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.blogs.index') }}">Blog Management</a>
                 </li>
-            
+                <li class="{{ request()->routeIs('admin.outlets.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.outlets.index') }}">Outlets</a>
+                </li>
             </ul>
         </li>
 
         {{-- ENQUIRIES & APPLICATIONS --}}
-        <li
-            class="{{ request()->routeIs(
-                'admin.enquiries.*',
-            )
-                ? 'active'
-                : '' }}">
+        <li class="{{ request()->routeIs(
+    'admin.feedbacks.*',
+    'admin.contact-enquiries.*',
+    'admin.franchise-enquiries.*',
+)
+    ? 'active'
+    : '' }}">
             <a href="#"><i class="fa-solid fa-inbox"></i> Enquiries & Applications</a>
             <ul>
-                <li class="{{ request()->routeIs('admin.enquiries.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.enquiries.index') }}">Contact Enquiries</a>
+                <li class="{{ request()->routeIs('admin.contact-enquiries.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.contact-enquiries.index') }}">Contact Enquiries</a>
+                </li>
+                <li class="{{ request()->routeIs('admin.feedbacks.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.feedbacks.index') }}">Feedback</a>
+                </li>
+                <li class="{{ request()->routeIs('admin.franchise-enquiries.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.franchise-enquiries.index') }}">Franchise Enquiries</a>
                 </li>
             </ul>
         </li>
@@ -93,16 +115,15 @@
         </li>
 
         {{-- SETTINGS --}}
-        <li
-            class="{{ request()->routeIs(
-                'admin.admin-setting.*',
-                'admin.settings.*',
-                'admin.notifications.*',
-                'admin.security.*',
-                'admin.redirect-settings.*',
-            )
-                ? 'active'
-                : '' }}">
+        <li class="{{ request()->routeIs(
+    'admin.admin-setting.*',
+    'admin.settings.*',
+    'admin.notifications.*',
+    'admin.security.*',
+    'admin.redirect-settings.*',
+)
+    ? 'active'
+    : '' }}">
             <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
             <ul>
                 <li class="{{ $onSettingsPage && $settingsTab === 'general' ? 'active' : '' }}">
@@ -112,7 +133,7 @@
                     <a href="{{ route('admin.admin-setting.index', ['tab' => 'smtp']) }}">SMTP</a>
                 </li>
                 <li class="{{ request()->routeIs('admin.settings.templates.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.settings.templates.index') }}">Template Settings</a>
+                    <a href="{{ route('admin.settings.email-templates.index') }}">Template Settings</a>
                 </li>
                 <li class="{{ $onSettingsPage && $settingsTab === 'tracking' ? 'active' : '' }}">
                     <a href="{{ route('admin.admin-setting.index', ['tab' => 'tracking']) }}">Tracking & Pixels</a>

@@ -8,64 +8,39 @@ use Illuminate\Http\Request;
 
 class ContactEnquiryController extends Controller
 {
-    private const STATUSES = ['new', 'contacted', 'closed'];
-
     public function index(Request $request)
     {
-        $query = ContactEnquiry::query()->latest();
+        $filter = $request->query('filter'); // null | 'unread'
 
-        if ($request->filled('status') && in_array($request->status, self::STATUSES, true)) {
-            $query->where('status', $request->status);
-        }
+        $enquiries = ContactEnquiry::query()
+            ->when($filter === 'unread', fn ($q) => $q->where('is_read', 0))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
 
-        if ($request->filled('service')) {
-            $query->where('service', $request->service);
-        }
+        $counts = [
+            'all'    => ContactEnquiry::count(),
+            'unread' => ContactEnquiry::where('is_read', 0)->count(),
+        ];
 
-        if ($request->filled('q')) {
-            $q = trim($request->q);
-            $query->where(function ($w) use ($q) {
-                $w->where('full_name', 'like', "%{$q}%")
-                    ->orWhere('email', 'like', "%{$q}%")
-                    ->orWhere('phone', 'like', "%{$q}%")
-                    ->orWhere('company', 'like', "%{$q}%")
-                    ->orWhere('message', 'like', "%{$q}%");
-            });
-        }
-
-        $enquiries = $query->paginate(15)->withQueryString();
-
-        $counts = ContactEnquiry::selectRaw('status, count(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
-
-        $services = ContactEnquiry::select('service')->distinct()->orderBy('service')->pluck('service');
-
-        return view('admin.enquiries.index', compact('enquiries', 'counts', 'services'));
+        return view('admin.contact-enquiries.index', compact('enquiries', 'filter', 'counts'));
     }
 
-    public function show(ContactEnquiry $enquiry)
+    public function show($id)
     {
-        return view('admin.enquiries.show', compact('enquiry'));
+        $enquiry = ContactEnquiry::findOrFail($id);
+
+        if (!$enquiry->is_read) {
+            $enquiry->update(['is_read' => 1]);
+        }
+
+        return view('admin.contact-enquiries.show', compact('enquiry'));
     }
 
-    public function update(Request $request, ContactEnquiry $enquiry)
+    public function destroy($id)
     {
-        $data = $request->validate([
-            'status' => 'required|in:' . implode(',', self::STATUSES),
-        ]);
+        ContactEnquiry::findOrFail($id)->delete();
 
-        $enquiry->update($data);
-
-        return back()->with('success', 'Enquiry status updated.');
-    }
-
-    public function destroy(ContactEnquiry $enquiry)
-    {
-        $enquiry->delete();
-
-        return redirect()
-            ->route('admin.enquiries.index')
-            ->with('success', 'Enquiry deleted.');
+        return response()->json(['message' => 'Enquiry deleted successfully.']);
     }
 }

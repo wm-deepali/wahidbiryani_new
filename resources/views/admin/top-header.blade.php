@@ -6,9 +6,7 @@
     $adminInitial = \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($adminName, 0, 1));
 
     // New (unattended) leads for the bell badge
-    $newLeads = \App\Models\ContactEnquiry::where('status', 'new')->count()
-        + \App\Models\PackageEnquiry::where('status', 'new')->count()
-        + \App\Models\KnowledgeBaseEnquiry::where('status', 'new')->count();
+    $newLeads = \App\Models\ContactEnquiry::where('is_read', 0)->count();
 @endphp
 <!DOCTYPE html>
 <html lang="en" data-textdirection="ltr" class="loading">
@@ -223,7 +221,7 @@ body {
             <div class="th-push"></div>
 
             <!-- New enquiries -->
-            <a href="{{ route('admin.enquiries.index', ['status' => 'new']) }}" class="th-icon-btn"
+            <a href="{{ route('admin.contact-enquiries.index', ['filter' => 'unread']) }}" class="th-icon-btn"
                 title="{{ $newLeads }} new {{ \Illuminate\Support\Str::plural('enquiry', $newLeads) }}"
                 style="margin-right:4px">
                 <i class="fa-solid fa-bell"></i>

@@ -21,12 +21,12 @@
     <!-- CSS Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
 
     @stack('styles')
 </head>
 
-<body class="home-page">
+<body class="@yield('body_class', 'inner-page')">
 
     @php
         $siteName = $general->site_name ?: config('app.name');
@@ -47,7 +47,7 @@
     <!-- Elegant Heritage Preloader -->
     <div id="preloader">
         <div class="preloader-logo-wrapper">
-            <img src="assets/img/logo.png" alt="Wahid Biryani Logo" class="preloader-logo">
+            <img src="{{ asset('assets/img/logo.png')}}" alt="Wahid Biryani Logo" class="preloader-logo">
             <div class="preloader-subtitle">Since 1955</div>
             <div class="preloader-line"></div>
         </div>
@@ -90,50 +90,50 @@
     <!-- Heritage Header Navigation -->
     <header class="heritage-header">
         <div class="header-container">
-            <a href="index.html" class="logo-link" title="Wahid Biryani - Since 1955">
-                <img src="assets/img/logo.png" alt="Wahid Biryani" class="logo-img">
+            <a href="{{ route('home') }}" class="logo-link" title="Wahid Biryani - Since 1955">
+                <img src="{{ asset('assets/img/logo.png')}}" alt="Wahid Biryani" class="logo-img">
             </a>
 
             <!-- Desktop Menu with Dropdowns -->
             <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="{{ route('home') }}" class="nav-link">Home</a></li>
 
                 <!-- Dropdown: Our Legacy -->
                 <li class="dropdown">
                     <a href="#" class="nav-link">Our Legacy</a>
                     <ul class="dropdown-menu">
-                        <li><a href="our-story.html">Our Story</a></li>
-                        <li><a href="wahid-legacy.html">The Wahid Biryani Legacy</a></li>
-                        <li><a href="director-message.html">Director's Message</a></li>
-                        <li><a href="awards.html">Awards & Recognitions</a></li>
+                        <li><a href="{{ route('our-story') }}">Our Story</a></li>
+                        <li><a href="{{ route('wahid-legacy') }}">The Wahid Biryani Legacy</a></li>
+                        <li><a href="{{ route('director-message') }}">Director's Message</a></li>
+                        <li><a href="{{ route('awards') }}">Awards & Recognitions</a></li>
                     </ul>
                 </li>
 
                 <!-- Direct Link: Signature Dishes -->
-                <li><a href="signature-dishes.html" class="nav-link">Signature Dishes</a></li>
+                <li><a href="{{ route('signature-dishes') }}" class="nav-link">Signature Dishes</a></li>
 
                 <!-- Direct Link: Menu -->
-                <li><a href="menu.html" class="nav-link">Menu</a></li>
+                <li><a href="{{ route('menu') }}" class="nav-link">Menu</a></li>
 
                 <!-- Direct Link: Our Outlets -->
-                <li><a href="our-outlets.html" class="nav-link">Our Outlets</a></li>
+                <li><a href="{{ route('our-outlets') }}" class="nav-link">Our Outlets</a></li>
 
                 <!-- Dropdown: Gallery -->
                 <li class="dropdown">
-                    <a href="image-gallery.html" class="nav-link">Gallery</a>
+                    <a href="{{ route('image-gallery') }}" class="nav-link">Gallery</a>
                     <ul class="dropdown-menu">
-                        <li><a href="image-gallery.html">Image Gallery</a></li>
-                        <li><a href="video-gallery.html">Video's</a></li>
+                        <li><a href="{{ route('image-gallery') }}">Image Gallery</a></li>
+                        <li><a href="{{ route('video-gallery') }}">Video's</a></li>
                     </ul>
                 </li>
 
                 <!-- Dropdown: Contact Us -->
                 <li class="dropdown">
-                    <a href="contact.html" class="nav-link">Contact Us</a>
+                    <a href="{{ route('contact') }}" class="nav-link">Contact Us</a>
                     <ul class="dropdown-menu">
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="feedback.html">Feedback & Suggestions</a></li>
-                        <li><a href="franchise.html">Franchise Enquiry</a></li>
+                        <li><a href="{{ route('contact') }}">Contact Us</a></li>
+                        <li><a href="{{ route('feedback') }}">Feedback & Suggestions</a></li>
+                        <li><a href="{{ route('franchise') }}">Franchise Enquiry</a></li>
                     </ul>
                 </li>
             </ul>
@@ -153,9 +153,160 @@
         <div class="header-border"></div>
     </header>
 
+    <!-- Mobile Offcanvas Menu (Collapsible Dropdowns) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+        <div class="offcanvas-header">
+            <a href="{{ route('home') }}" class="logo-link p-1 bg-white rounded">
+                <img src="assets/img/logo.png" alt="Wahid Biryani" style="max-height: 44px;">
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="offcanvas-nav">
+                <li class="mb-3">
+                    <a href="{{ route('home') }}" class="offcanvas-link">Home</a>
+                </li>
+
+                <!-- Mobile Collapse: Our Legacy -->
+                <li class="mb-3">
+                    <a href="#mobileLegacyCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="mobileLegacyCollapse">Our Legacy <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse ps-3 mt-2" id="mobileLegacyCollapse">
+                        <a href="{{ route('our-story') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Our Story</a>
+                        <a href="{{ route('wahid-legacy') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">The Wahid
+                            Biryani Legacy</a>
+                        <a href="{{ route('director-message') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Director's
+                            Message</a>
+                        <a href="{{ route('awards') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Awards &
+                            Recognitions</a>
+                    </div>
+                </li>
+
+                <!-- Mobile Collapse: Signature Dishes -->
+                <li class="mb-3">
+                    <a href="{{ route('signature-dishes') }}" class="offcanvas-link">Signature Dishes </a>
+                </li>
+
+                <!-- Direct Link: Menu -->
+                <li class="mb-3">
+                    <a href="{{ route('menu') }}" class="offcanvas-link">Menu</a>
+                </li>
+
+                <!-- Direct Link: Our Outlets -->
+                <li class="mb-3">
+                    <a href="{{ route('our-outlets') }}" class="offcanvas-link">Our Outlets</a>
+                </li>
+
+                <!-- Mobile Collapse: Gallery -->
+                <li class="mb-3">
+                    <a href="#mobileGalleryCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="mobileGalleryCollapse">Gallery <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse ps-3 mt-2" id="mobileGalleryCollapse">
+                        <a href="{{ route('image-gallery') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Image
+                            Gallery</a>
+                        <a href="{{ route('video-gallery') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Video's</a>
+                    </div>
+                </li>
+
+                <!-- Mobile Collapse: Contact Us -->
+                <li class="mb-3">
+                    <a href="#mobileContactCollapse" class="offcanvas-link" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="mobileContactCollapse">Contact Us <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse ps-3 mt-2" id="mobileContactCollapse">
+                        <a href="{{ route('contact') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Contact Us</a>
+                        <a href="{{ route('feedback') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Feedback &
+                            Suggestions</a>
+                        <a href="{{ route('franchise') }}" class="offcanvas-sublink" data-bs-dismiss="offcanvas">Franchise
+                            Enquiry</a>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="offcanvas-footer">
+                <a href="javascript:void(0)" class="btn btn-burgundy-fill w-100 d-block text-center py-3"
+                    data-bs-toggle="modal" data-bs-target="#orderOnlineModal" data-bs-dismiss="offcanvas">Order
+                    Online</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+        <div class="offcanvas-header">
+            <a href="{{ route('home') }}" class="logo-link p-1 bg-white rounded">
+                <img src="assets/img/logo.png" alt="Wahid Biryani" style="max-height: 44px;">
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="offcanvas-nav">
+                <li class="mb-3">
+                    <a href="{{ route('home') }}" class="offcanvas-link ">Home</a>
+                </li>
+
+                <!-- Mobile Collapse: Our Legacy -->
+                <li class="mb-3">
+                    <a href="#mobileLegacyCollapse" class="offcanvas-link " data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="mobileLegacyCollapse">Our Legacy <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse  ps-3 mt-2" id="mobileLegacyCollapse">
+                        <a href="{{ route('our-story') }}" class="offcanvas-sublink ">Our Story</a>
+                        <a href="{{ route('wahid-legacy') }}" class="offcanvas-sublink ">The Wahid Biryani Legacy</a>
+                        <a href="{{ route('director-message') }}" class="offcanvas-sublink ">Director's Message</a>
+                        <a href="{{ route('awards') }}" class="offcanvas-sublink ">Awards & Recognitions</a>
+                    </div>
+                </li>
+
+                <!-- Mobile Collapse: Signature Dishes -->
+                <li class="mb-3">
+                    <a href="{{ route('signature-dishes') }}" class="offcanvas-link">Signature Dishes </a>
+                </li>
+
+                <!-- Direct Link: Menu -->
+                <li class="mb-3">
+                    <a href="{{ route('menu') }}" class="offcanvas-link ">Menu</a>
+                </li>
+
+                <!-- Direct Link: Our Outlets -->
+                <li class="mb-3">
+                    <a href="{{ route('our-outlets') }}" class="offcanvas-link ">Our Outlets</a>
+                </li>
+
+                <!-- Mobile Collapse: Gallery -->
+                <li class="mb-3">
+                    <a href="#mobileGalleryCollapse" class="offcanvas-link active" data-bs-toggle="collapse"
+                        role="button" aria-expanded="true" aria-controls="mobileGalleryCollapse">Gallery <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse show ps-3 mt-2" id="mobileGalleryCollapse">
+                        <a href="{{ route('image-gallery') }}" class="offcanvas-sublink active text-accent">Image Gallery</a>
+                        <a href="{{ route('video-gallery') }}" class="offcanvas-sublink ">Video's</a>
+                    </div>
+                </li>
+
+                <!-- Mobile Collapse: Contact Us -->
+                <li class="mb-3">
+                    <a href="#mobileContactCollapse" class="offcanvas-link " data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="mobileContactCollapse">Contact Us <i
+                            class="fa-solid fa-chevron-down fs-6 ms-1"></i></a>
+                    <div class="collapse  ps-3 mt-2" id="mobileContactCollapse">
+                        <a href="{{ route('contact') }}" class="offcanvas-sublink ">Contact Us</a>
+                        <a href="{{ route('feedback') }}" class="offcanvas-sublink ">Feedback & Suggestions</a>
+                        <a href="{{ route('franchise') }}" class="offcanvas-sublink ">Franchise Enquiry</a>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="offcanvas-footer">
+                <a href="javascript:void(0)" class="btn btn-burgundy-fill w-100 d-block text-center py-3"
+                    data-bs-toggle="modal" data-bs-target="#orderOnlineModal" data-bs-dismiss="offcanvas">Order
+                    Online</a>
+            </div>
+        </div>
+    </div>
+
     @yield('content')
-
-
 
     <footer class="heritage-footer">
         <!-- Rumi Darwaza Scalloped Arch Top Ornament -->
@@ -183,7 +334,7 @@
                 <!-- Column 1: Royal Emblem & Founder Ethos -->
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <div class="footer-brand-wrapper">
-                        <img src="assets/img/logo.png" alt="Wahid Biryani Logo" class="footer-logo mb-3">
+                        <img src="{{ asset('assets/img/logo.png')}}" alt="Wahid Biryani Logo" class="footer-logo mb-3">
                         <span class="d-block urdu-accent mb-2"
                             style="color: var(--color-accent); font-size: 1.5rem;">روایت • نسلاً
                             بعد نسل</span>
@@ -241,20 +392,20 @@
                     <h4 class="font-display text-accent fs-5 mb-3 border-bottom border-accent-subtle pb-2">Quick Links
                     </h4>
                     <ul class="list-unstyled footer-quick-links font-body" style="font-size: 0.88rem; line-height: 2;">
-                        <li><a href="our-story.html" class="footer-link"><i
+                        <li><a href="{{ route('our-story') }}" class="footer-link"><i
                                     class="fa-solid fa-chevron-right text-accent me-2"
                                     style="font-size: 0.7rem;"></i>Our Story</a></li>
-                        <li><a href="wahid-legacy.html" class="footer-link"><i
+                        <li><a href="{{ route('wahid-legacy') }}" class="footer-link"><i
                                     class="fa-solid fa-chevron-right text-accent me-2"
                                     style="font-size: 0.7rem;"></i>Wahid Biryani Legacy</a></li>
-                        <li><a href="director-message.html" class="footer-link"><i
+                        <li><a href="{{ route('director-message') }}" class="footer-link"><i
                                     class="fa-solid fa-chevron-right text-accent me-2"
                                     style="font-size: 0.7rem;"></i>Director's
                                 Message</a></li>
-                        <li><a href="awards.html" class="footer-link"><i
+                        <li><a href="{{ route('awards') }}" class="footer-link"><i
                                     class="fa-solid fa-chevron-right text-accent me-2"
                                     style="font-size: 0.7rem;"></i>Awards & Recognitions</a></li>
-                        <li><a href="feedback.html" class="footer-link"><i
+                        <li><a href="{{ route('feedback') }}" class="footer-link"><i
                                     class="fa-solid fa-chevron-right text-accent me-2"
                                     style="font-size: 0.7rem;"></i>Feedback & Suggestions</a></li>
                     </ul>
@@ -290,7 +441,7 @@
                             <span class="ps-4 d-block"><a href="mailto:info@wahidbiryani.com"
                                     class="footer-link">info@wahidbiryani.com</a></span>
                         </p>
-                        <a href="franchise.html" class="btn btn-gold-outline btn-sm magnetic-btn">Franchise Inquiry</a>
+                        <a href="{{ route('franchise') }}" class="btn btn-gold-outline btn-sm magnetic-btn">Franchise Inquiry</a>
                     </div>
                 </div>
 
@@ -312,15 +463,15 @@
                 </div>
 
                 <ul class="footer-nav m-0 p-0 d-flex flex-wrap gap-3 gap-md-4 justify-content-center list-unstyled">
-                    <li><a href="index.html" class="footer-nav-link">Home</a></li>
-                    <li><a href="our-story.html" class="footer-nav-link">Our Legacy</a></li>
-                    <li><a href="signature-dishes.html" class="footer-nav-link">Signature Dishes</a></li>
-                    <li><a href="menu.html" class="footer-nav-link">Menu</a></li>
-                    <li><a href="our-outlets.html" class="footer-nav-link">Our Outlets</a></li>
-                    <li><a href="image-gallery.html" class="footer-nav-link">Gallery</a></li>
-                    <li><a href="video-gallery.html" class="footer-nav-link">Videos</a></li>
-                    <li><a href="faq.html" class="footer-nav-link">FAQ</a></li>
-                    <li><a href="contact.html" class="footer-nav-link">Contact</a></li>
+                    <li><a href="{{ route('home') }}" class="footer-nav-link">Home</a></li>
+                    <li><a href="{{ route('our-story') }}" class="footer-nav-link">Our Legacy</a></li>
+                    <li><a href="{{ route('signature-dishes') }}" class="footer-nav-link">Signature Dishes</a></li>
+                    <li><a href="{{ route('menu') }}" class="footer-nav-link">Menu</a></li>
+                    <li><a href="{{ route('our-outlets') }}" class="footer-nav-link">Our Outlets</a></li>
+                    <li><a href="{{ route('image-gallery') }}" class="footer-nav-link">Gallery</a></li>
+                    <li><a href="{{ route('video-gallery') }}" class="footer-nav-link">Videos</a></li>
+                    <li><a href="{{ route('faq') }}" class="footer-nav-link">FAQ</a></li>
+                    <li><a href="{{ route('contact') }}" class="footer-nav-link">Contact</a></li>
                 </ul>
             </div>
 
@@ -340,8 +491,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="assets/js/animations.js" defer></script>
-    <script src="assets/js/main.js" defer></script>
+    <script src="{{ asset('assets/js/animations.js')}}" defer></script>
+    <script src="{{ asset('assets/js/main.js')}}" defer></script>
 
     <!-- Royal Order Food Online Outlets Popup Modal -->
     <div class="modal fade royal-order-modal" id="orderOnlineModal" tabindex="-1"
@@ -554,7 +705,7 @@
                     class="modal-footer royal-modal-footer justify-content-between border-0 px-4 py-3 bg-light-subtle rounded-bottom-4">
                     <span class="small text-muted"><i class="fa-solid fa-truck-fast text-accent me-1"></i> Home Delivery
                         Available Across Lucknow</span>
-                    <a href="menu.html" class="small text-primary fw-bold text-decoration-none hover-text-accent"
+                    <a href="{{ route('menu') }}" class="small text-primary fw-bold text-decoration-none hover-text-accent"
                         data-bs-dismiss="modal">
                         Explore Full Dastarkhwan Menu <i class="fa-solid fa-arrow-right ms-1"></i>
                     </a>

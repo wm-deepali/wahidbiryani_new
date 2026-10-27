@@ -8,7 +8,6 @@
     <div class="app-content content container-fluid">
         <div class="faq-page">
 
-            <!-- Page header -->
             <div class="page-header">
                 <div>
                     <h1>Add FAQ</h1>
@@ -22,24 +21,13 @@
                 </div>
             </div>
 
-            <form id="faqForm" method="POST" action="{{ route('admin.faqs.store') }}">
+            <form action="{{ route('admin.faqs.store') }}" method="POST">
                 @csrf
-
                 @include('admin.faqs._form', ['faq' => null])
-
-                <!-- Action bar -->
-                <div class="action-bar">
-                    <a href="{{ route('admin.faqs.index') }}" class="btn-secondary-dash">Cancel</a>
-                    <button type="submit" id="saveBtn" class="btn-primary-dash" data-loading="Saving...">
-                        <i class="fa-solid fa-save"></i> Save FAQ
-                    </button>
-                </div>
             </form>
 
         </div>
     </div>
 </div>
 
-@include('admin.footer')
-
-@include('admin.faqs._form-script')
+@include('admin.footer')e

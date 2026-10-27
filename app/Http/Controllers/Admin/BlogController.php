@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
-use App\Traits\CompressesImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class BlogController extends Controller
 {
-    use CompressesImages;
+    private const UPLOAD_DIR = 'blogs'; // stored on the 'public' disk => storage/app/public/blogs
+    private const IMAGE_FIELDS = ['image', 'banner_image', 'author_image'];
 
     public function index()
     {
-        $blogs = Blog::latest()->get();
+        $blogs = Blog::ordered()->get();
 
         return view('admin.blogs.index', compact('blogs'));
     }
@@ -26,37 +28,13 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate($this->rules());
+        $data = $this->validated($request);
+        $data = $this->handleUploads($request, $data);
 
-        $imageName = null;
-
-        if ($request->hasFile('image')) {
-            // Blog featured image — wide banner-style
-            $imageName = $this->compressAndStore(
-                $request->file('image'),
-                'blogs',
-                1200,
-                80
-            );
-        }
-
-        Blog::create([
-            'title'             => $request->title,
-            'slug'              => Blog::uniqueSlug($request->filled('slug') ? $request->slug : $request->title),
-            'category'          => $request->category,
-            'published_at'      => $request->published_at,
-            'image'             => $imageName,
-            'image_alt'         => $request->image_alt,
-            'short_description' => $request->short_description,
-            'content'           => $request->content,
-            'meta_title'        => $request->meta_title,
-            'meta_description'  => $request->meta_description,
-            'show_home'         => $request->show_home ? 1 : 0,
-            'status'            => $request->status ? 1 : 0,
-        ]);
+        Blog::create($data);
 
         return redirect()->route('admin.blogs.index')
-            ->with('success', 'Blog Added Successfully');
+            ->with('success', 'Blog added successfully.');
     }
 
     public function edit($id)
@@ -68,73 +46,90 @@ class BlogController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate($this->rules());
-
         $blog = Blog::findOrFail($id);
 
-        $imageName = $blog->image;
+        $data = $this->validated($request, $blog);
+        $data = $this->handleUploads($request, $data, $blog);
 
-        if ($request->hasFile('image')) {
-            if ($blog->image) {
-                Storage::disk('public')->delete($blog->image);
-            }
-
-            $imageName = $this->compressAndStore(
-                $request->file('image'),
-                'blogs',
-                1200,
-                80
-            );
-        }
-
-        $blog->update([
-            'title'             => $request->title,
-            // keeps the existing URL unless the slug field is changed manually
-            'slug'              => Blog::uniqueSlug($request->filled('slug') ? $request->slug : $blog->slug, $blog->id),
-            'category'          => $request->category,
-            'published_at'      => $request->published_at ?: $blog->published_at,
-            'image'             => $imageName,
-            'image_alt'         => $request->image_alt,
-            'short_description' => $request->short_description,
-            'content'           => $request->content,
-            'meta_title'        => $request->meta_title,
-            'meta_description'  => $request->meta_description,
-            'show_home'         => $request->show_home ? 1 : 0,
-            'status'            => $request->status ? 1 : 0,
-        ]);
+        $blog->update($data);
 
         return redirect()->route('admin.blogs.index')
-            ->with('success', 'Blog Updated Successfully');
+            ->with('success', 'Blog updated successfully.');
     }
 
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
 
-        if ($blog->image) {
-            Storage::disk('public')->delete($blog->image);
+        foreach (self::IMAGE_FIELDS as $field) {
+            $this->deleteFile($blog->{$field});
         }
 
         $blog->delete();
 
-        return response()->json([
-            'message' => 'Blog Deleted Successfully'
-        ]);
+        return response()->json(['message' => 'Blog deleted successfully.']);
     }
 
-    private function rules(): array
+    /* ---------------- helpers ---------------- */
+
+    private function validated(Request $request, ?Blog $blog = null): array
     {
-        return [
-            'title'             => 'required|string|max:255',
-            'slug'              => 'nullable|string|max:255',
-            'category'          => 'nullable|string|max:100',
-            'published_at'      => 'nullable|date',
-            'image'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'image_alt'         => 'nullable|string|max:255',
-            'short_description' => 'nullable|string',
-            'content'           => 'required|string',
-            'meta_title'        => 'nullable|string|max:255',
-            'meta_description'  => 'nullable|string',
-        ];
+        $data = $request->validate([
+            'title'            => 'required|string|max:255',
+            'slug'             => ['nullable', 'string', 'max:255', Rule::unique('blogs', 'slug')->ignore($blog?->id)],
+            'category'         => 'nullable|string|max:255',
+            'urdu_accent'      => 'nullable|string|max:255',
+            'short_description'=> 'nullable|string',
+            'content'          => 'required|string',
+            'author_name'      => 'nullable|string|max:255',
+            'author_title'     => 'nullable|string|max:255',
+            'read_time'        => 'nullable|integer|min:1|max:999',
+            'published_at'     => 'nullable|date',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'sort_order'       => 'nullable|integer|min:0',
+            'status'           => 'nullable|boolean',
+            'image'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner_image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'author_image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+        ]);
+
+        $data['slug']        = !empty($data['slug']) ? Str::slug($data['slug']) : null; // model auto-generates when empty
+        $data['author_name'] = $data['author_name'] ?: 'Wahid Archives';
+        $data['read_time']   = $data['read_time'] ?? 5;
+        $data['sort_order']  = $data['sort_order'] ?? 0;
+        $data['status']      = $request->boolean('status');
+
+        return $data;
+    }
+
+    private function handleUploads(Request $request, array $data, ?Blog $blog = null): array
+    {
+        foreach (self::IMAGE_FIELDS as $field) {
+            unset($data[$field]); // drop UploadedFile objects from validated data
+
+            if ($request->hasFile($field)) {
+                if ($blog) {
+                    $this->deleteFile($blog->{$field});
+                }
+                $data[$field] = $this->storeFile($request->file($field));
+            }
+        }
+
+        return $data;
+    }
+
+    private function storeFile($file): string
+    {
+        // Saved to storage/app/public/blogs, served via the public/storage symlink
+        return $file->store(self::UPLOAD_DIR, 'public');
+    }
+
+    private function deleteFile(?string $path): void
+    {
+        // Only delete files we uploaded (blogs/...), never static assets/ images
+        if ($path && Str::startsWith($path, self::UPLOAD_DIR . '/')) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }
