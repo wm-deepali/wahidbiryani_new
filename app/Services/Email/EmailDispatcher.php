@@ -14,102 +14,106 @@ use Illuminate\Mail\Message;
 class EmailDispatcher
 {
     /**
-     * Maps template event_key → SmtpSetting boolean column.
-     * Used by send() for customer / candidate thank-you emails.
+     * Maps event_key → SmtpSetting boolean column (Admin Notifications switches).
+     * Events absent from this map have no global toggle and go straight to Guard 2.
      */
     private static array $columnMap = [
-        'customer-thank-you' => 'customer_thank_you',
-        'candidate-thank-you' => 'candidate_thank_you',
+        'contact-enquiry' => 'notify_contact_enquiry',
+        'feedback' => 'notify_feedback',
+        'franchise-enquiry' => 'notify_franchise_enquiry',
     ];
 
     /**
-     * Admin detail emails. They have no EmailTemplate row — the layout is the
-     * emails.admin-detail view and recipients come from SmtpSetting.
+     * Variables available in every template.
+     * Values passed to send() override these.
      */
-    private static array $adminTypes = [
-        'customer-detail' => [
-            'event_key' => 'admin-customer-detail',
-            'toggle' => 'admin_customer_detail',
-            'to' => 'enquiry_admin_to',
-            'cc' => 'enquiryCcList',
-        ],
-        'candidate-detail' => [
-            'event_key' => 'admin-candidate-detail',
-            'toggle' => 'admin_candidate_detail',
-            'to' => 'career_admin_to',
-            'cc' => 'careerCcList',
-        ],
-    ];
-
-    /**
-     * Variable keys whose values may contain trusted HTML and must NOT be escaped.
-     * Empty for now — every value is escaped, so form input can never inject HTML.
-     */
-    private static array $rawKeys = [];
-
     private static function globalVariables(): array
     {
         $settings = Setting::first();
+        $brand = $settings?->site_name ?: config('app.name');
 
         return [
-            '{brand_name}' => $settings?->site_name ?? config('app.name'),
-            '{site_url}' => url('/'),
-            '{logo_url}' => !empty($settings?->header_logo)
-                ? asset('storage/' . $settings->header_logo)
-                : '',
-            '{support_number}' => $settings?->phone ?? '',
-            '{support_email}' => $settings?->support_email ?? $settings?->admin_email ?? '',
-            '{tagline}' => $settings?->tagline ?? '',
+            '{brand_name}' => $brand,
+            '{site_url}' => route('home'),
+            '{logo_url}' => $settings?->header_logo_url ?? asset('assets/img/logo.png'),
+            '{submitted_at}' => now()->format('d M Y, g:i A'),
+            '{ip_address}' => request()->ip() ?? '',
         ];
     }
 
     /**
-     * Reference stored in email_logs (e.g. 'ENQ-12'), taken from {reference} if given.
+     * Visitor's email, used as the reference in email_logs (if present).
      */
     private static function extractReference(array $variables): ?string
     {
-        return $variables['{reference}'] ?? $variables['{order_number}'] ?? null;
+        return $variables['{email}'] ?? null;
     }
 
     /**
-     * HTML-escape every value before it goes into the email body.
+     * Subject line: raw text, with line breaks removed (header-injection safe).
      */
-    private static function escapeVariables(array $variables): array
+    private static function renderSubject(string $subject, array $variables): string
     {
-        foreach ($variables as $key => $value) {
-            if (in_array($key, self::$rawKeys, true)) {
-                continue;
-            }
+        $subject = str_replace(array_keys($variables), array_values($variables), $subject);
 
-            $variables[$key] = e((string) $value);
+        return trim(preg_replace('/\s+/', ' ', $subject));
+    }
+
+    /**
+     * Body: visitor-supplied values are HTML-escaped so a submitted message
+     * cannot inject markup into the admin's inbox. Line breaks in {message}
+     * are kept as <br>.
+     */
+    private static function renderBody(string $body, array $variables): string
+    {
+        $safe = [];
+
+        foreach ($variables as $key => $value) {
+            $value = (string) $value;
+
+            $safe[$key] = $key === '{message}'
+                ? nl2br(e($value))
+                : e($value);
         }
 
-        return $variables;
+        return str_replace(array_keys($safe), array_values($safe), $body);
     }
 
     /**
-     * Single-line plain values for the subject (no HTML escaping, no line breaks).
-     */
-    private static function plainVariables(array $variables): array
-    {
-        return array_map(
-            fn ($value) => trim((string) preg_replace('/\s+/', ' ', (string) $value)),
-            $variables
-        );
-    }
-
-    /**
-     * Resolve, render, and send a template-based email (customer / candidate thank-you).
+     * Convenience for the website forms: send an admin notification to the
+     * Support Email (falls back to Admin Email) from General Settings.
      *
-     * Guard 1 — SmtpSetting per-event toggle must be enabled.
+     * Usage:
+     *   EmailDispatcher::sendToAdmin('contact-enquiry', [
+     *       '{name}' => $data['name'], '{email}' => $data['email'], ...
+     *   ]);
+     */
+    public static function sendToAdmin(string $eventKey, array $variables = []): array
+    {
+        $to = Setting::first()?->contact_email;
+
+        if (empty($to)) {
+            Log::warning("EmailDispatcher: '{$eventKey}' not sent — no admin/support email in General Settings.");
+
+            return [
+                'success' => false,
+                'response' => 'No admin email is set in General Settings.',
+            ];
+        }
+
+        return self::send($eventKey, $to, $variables, 'Admin');
+    }
+
+    /**
+     * Resolve, render, and send an email for a given event.
+     *
+     * Guard 1 — SmtpSetting notify_* switch must be on.
      * Guard 2 — EmailTemplate row must exist and be enabled.
      * Both must pass for the email to be sent.
      *
-     * "Only if mobile is verified" is the caller's rule — call this only after OTP verification.
-     *
-     * @param  string       $eventKey   'customer-thank-you' | 'candidate-thank-you'
+     * @param  string       $eventKey   contact-enquiry | feedback | franchise-enquiry
      * @param  string       $to         Recipient email address
-     * @param  array        $variables  e.g. ['{customer_name}' => 'Rahul', '{service}' => 'SEO']
+     * @param  array        $variables  e.g. ['{name}' => 'Priya', '{email}' => 'priya@example.com']
      * @param  string|null  $toName     Recipient display name (optional)
      * @return array{success: bool, response: mixed}
      */
@@ -119,7 +123,7 @@ class EmailDispatcher
 
         $smtp = SmtpSetting::getInstance();
 
-        // ── Guard 1: SmtpSetting per-event toggle ─────────────────────────────
+        // ── Guard 1: SmtpSetting notification switch ──────────────────────────
         $smtpCol = self::$columnMap[$eventKey] ?? null;
 
         if ($smtpCol && empty($smtp->{$smtpCol})) {
@@ -172,20 +176,9 @@ class EmailDispatcher
             $variables
         );
 
-        // ── Render: subject gets plain values, body gets HTML-escaped values ──
-        $plain = self::plainVariables($variables);
-        $subject = str_replace(
-            array_keys($plain),
-            array_values($plain),
-            $template->subject ?? ''
-        );
-
-        $safe = self::escapeVariables($variables);
-        $body = str_replace(
-            array_keys($safe),
-            array_values($safe),
-            $template->body
-        );
+        // ── Render: replace {variables} in subject and body ───────────────────
+        $subject = self::renderSubject($template->subject ?? '', $variables);
+        $body = self::renderBody($template->body, $variables);
 
         // ── Resolve from / reply-to (template overrides SmtpSetting fallback) ─
         $fromName = $template->from_name ?? $smtp->from_name ?? config('mail.from.name');
@@ -247,153 +240,16 @@ class EmailDispatcher
     }
 
     /**
-     * Send the admin detail email (Customer Detail / Candidate Detail).
-     *
-     * Goes to the recipients saved in SMTP settings (To + CC), is sent on every
-     * submission whether the mobile is verified or not, and always shows
-     * "Mobile Verified: Yes/No". Guarded only by the SmtpSetting toggle.
-     *
-     * @param  string  $type            'customer-detail' | 'candidate-detail'
-     * @param  string  $title           e.g. 'New Enquiry: Rahul Sharma (SEO)'
-     * @param  array   $rows            Ordered label => value pairs shown in the email
-     * @param  bool    $mobileVerified  Whether the OTP was verified
-     * @param  array   $options         reference, attachment_path, attachment_name,
-     *                                  reply_to, reply_to_name
-     * @return array{success: bool, response: mixed}
-     */
-    public static function sendAdmin(string $type, string $title, array $rows, bool $mobileVerified, array $options = []): array
-    {
-        $cfg = self::$adminTypes[$type] ?? null;
-
-        if (!$cfg) {
-            return ['success' => false, 'response' => "Unknown admin email type '{$type}'."];
-        }
-
-        $eventKey = $cfg['event_key'];
-        $smtp = SmtpSetting::getInstance();
-        $to = $smtp->{$cfg['to']};
-        $cc = $smtp->{$cfg['cc']}();
-        $reference = $options['reference'] ?? null;
-
-        $verifiedText = $mobileVerified ? 'Yes' : 'No';
-        $subject = trim((string) preg_replace('/\s+/', ' ', "{$title} | Mobile Verified: {$verifiedText}"));
-
-        $meta = $rows + ['Mobile Verified' => $verifiedText];
-
-        // ── Guard: SmtpSetting toggle + recipient must be set ─────────────────
-        if (!$smtp->shouldSend($cfg['toggle'])) {
-            $reason = "Event '{$eventKey}' is disabled in SMTP settings.";
-        } elseif (empty($to)) {
-            $reason = "Admin recipient for '{$eventKey}' is not set in SMTP settings.";
-        } else {
-            $reason = null;
-        }
-
-        if ($reason) {
-            Log::info("EmailDispatcher: {$reason}");
-
-            EmailLog::create([
-                'event_key' => $eventKey,
-                'to_email' => $to ?: '',
-                'to_name' => null,
-                'subject' => $subject,
-                'status' => 'blocked',
-                'reference' => $reference,
-                'error_message' => $reason,
-                'meta' => $meta,
-            ]);
-
-            return ['success' => false, 'response' => $reason];
-        }
-
-        $settings = Setting::first();
-
-        $body = view('emails.admin-detail', [
-            'brand' => $settings?->site_name ?? config('app.name'),
-            'title' => $title,
-            'rows' => $rows,
-            'mobileVerified' => $mobileVerified,
-        ])->render();
-
-        $fromName = $smtp->from_name ?? config('mail.from.name');
-        $fromEmail = $smtp->from_email ?? config('mail.from.address');
-
-        $attachmentPath = $options['attachment_path'] ?? null;
-        $attachmentName = $options['attachment_name'] ?? null;
-        $replyTo = $options['reply_to'] ?? null;
-        $replyToName = $options['reply_to_name'] ?? null;
-
-        if ($attachmentPath && !is_file($attachmentPath)) {
-            Log::warning("EmailDispatcher: attachment not found for '{$eventKey}'.", ['path' => $attachmentPath]);
-            $attachmentPath = null;
-        }
-
-        MailHelper::configure();
-
-        try {
-            Mail::html($body, function (Message $msg) use ($to, $cc, $subject, $fromName, $fromEmail, $replyTo, $replyToName, $attachmentPath, $attachmentName) {
-                $msg->to($to)
-                    ->subject($subject)
-                    ->from($fromEmail, $fromName);
-
-                if (!empty($cc)) {
-                    $msg->cc($cc);
-                }
-
-                if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-                    $msg->replyTo($replyTo, $replyToName);
-                }
-
-                if ($attachmentPath) {
-                    $msg->attach($attachmentPath, array_filter(['as' => $attachmentName]));
-                }
-            });
-
-            EmailLog::create([
-                'event_key' => $eventKey,
-                'to_email' => $to,
-                'to_name' => null,
-                'subject' => $subject,
-                'status' => 'sent',
-                'reference' => $reference,
-                'error_message' => null,
-                'meta' => $meta,
-            ]);
-
-            return ['success' => true, 'response' => "Admin email sent to {$to}"];
-
-        } catch (\Throwable $e) {
-            Log::error("EmailDispatcher: exception for '{$eventKey}'.", [
-                'to' => $to,
-                'error' => $e->getMessage(),
-            ]);
-
-            EmailLog::create([
-                'event_key' => $eventKey,
-                'to_email' => $to,
-                'to_name' => null,
-                'subject' => $subject,
-                'status' => 'failed',
-                'reference' => $reference,
-                'error_message' => $e->getMessage(),
-                'meta' => $meta,
-            ]);
-
-            return ['success' => false, 'response' => $e->getMessage()];
-        }
-    }
-
-    /**
      * Same as send() but bypasses BOTH guards.
      * Used exclusively by admin test sends — always attempts delivery
      * regardless of SmtpSetting toggles or EmailTemplate enabled flag.
      *
      * Not logged to email_logs — test sends are ad-hoc admin actions,
-     * not real customer-facing events.
+     * not real website events.
      *
      * @param  string       $eventKey
      * @param  string       $to
-     * @param  array        $variables
+     * @param  array        $variables  Trusted sample values (EmailTemplateController::sampleVars)
      * @param  string|null  $toName
      * @return array{success: bool, response: mixed}
      */
@@ -408,11 +264,7 @@ class EmailDispatcher
             ];
         }
 
-        $subject = str_replace(
-            array_keys($variables),
-            array_values($variables),
-            $template->subject ?? '(No Subject)'
-        );
+        $subject = self::renderSubject($template->subject ?? '(No Subject)', $variables);
 
         $body = str_replace(
             array_keys($variables),

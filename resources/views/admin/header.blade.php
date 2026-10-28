@@ -82,10 +82,24 @@
             </ul>
         </li>
 
+        {{-- GALLERY --}}
+        <li class="{{ request()->routeIs('admin.gallery-images.*', 'admin.gallery-videos.*') ? 'active' : '' }}">
+            <a href="#"><i class="fa-solid fa-images"></i> Gallery</a>
+            <ul>
+                <li class="{{ request()->routeIs('admin.gallery-images.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.gallery-images.index') }}">Image Gallery</a>
+                </li>
+                <li class="{{ request()->routeIs('admin.gallery-videos.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.gallery-videos.index') }}">Video Gallery</a>
+                </li>
+            </ul>
+        </li>
+
         {{-- ENQUIRIES & APPLICATIONS --}}
         <li class="{{ request()->routeIs(
-    'admin.feedbacks.*',
+    'admin.enquiries.*',
     'admin.contact-enquiries.*',
+    'admin.feedbacks.*',
     'admin.franchise-enquiries.*',
 )
     ? 'active'
@@ -134,12 +148,6 @@
                 </li>
                 <li class="{{ request()->routeIs('admin.settings.templates.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.settings.email-templates.index') }}">Template Settings</a>
-                </li>
-                <li class="{{ $onSettingsPage && $settingsTab === 'tracking' ? 'active' : '' }}">
-                    <a href="{{ route('admin.admin-setting.index', ['tab' => 'tracking']) }}">Tracking & Pixels</a>
-                </li>
-                <li class="{{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.notifications.index') }}">Notification Centre</a>
                 </li>
                 <li class="{{ request()->routeIs('admin.redirect-settings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.redirect-settings.index') }}">Redirect Settings</a>

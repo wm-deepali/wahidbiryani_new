@@ -29,13 +29,40 @@ class EmailTemplate extends Model
      * All valid event keys, in sidebar display order.
      * Changing this list is the only thing needed to add/remove events.
      *
-     * Admin emails (Customer Detail / Candidate Detail) have no template row;
-     * their recipients live in smtp_settings and the layout is a view file.
+     * Every event here is an admin notification, sent when a visitor submits a
+     * website form. The recipient is the Support Email (or Admin Email) from
+     * General Settings. The on/off switch for each event lives in smtp_settings
+     * (notify_*); a template must ALSO be enabled here for its mail to go out.
      */
     public static array $eventKeys = [
-        'customer-thank-you',
-        'candidate-thank-you',
+        'contact-enquiry',
+        'feedback',
+        'franchise-enquiry',
     ];
+
+    /**
+     * Maps each event key to its switch column in smtp_settings.
+     * Use with SmtpSetting::shouldNotify() (pass the key's value below).
+     */
+    public static array $notifyEvents = [
+        'contact-enquiry' => 'contact_enquiry',
+        'feedback' => 'feedback',
+        'franchise-enquiry' => 'franchise_enquiry',
+    ];
+
+    /**
+     * Placeholders available in every template.
+     */
+    protected static function commonVars(): array
+    {
+        return [
+            '{brand_name}' => 'Brand Name',
+            '{site_url}' => 'Website URL',
+            '{logo_url}' => 'Logo URL',
+            '{submitted_at}' => 'Date & Time Submitted',
+            '{ip_address}' => 'Visitor IP Address',
+        ];
+    }
 
     /**
      * Human-readable metadata for each event key.
@@ -43,51 +70,85 @@ class EmailTemplate extends Model
     public static function eventMeta(): array
     {
         return [
-            'customer-thank-you' => [
-                'label' => 'Customer Thank You',
-                'icon' => 'fa fa-heart',
-                'desc' => 'Sent to the customer after a Business / Service enquiry, only when their mobile number is OTP verified.',
-                'default_subject' => 'Thank you for contacting {brand_name}, {customer_name}!',
-                'default_preview' => 'We have received your enquiry and will contact you shortly.',
-                'default_body' => '<p>Hi {customer_name},</p>
-<p>Thank you for your enquiry regarding <strong>{service}</strong>. Our team has received your details and will get in touch with you shortly on <strong>{customer_mobile}</strong>.</p>
-<p>If you need anything urgently, simply reply to this email.</p>
-<p>Warm regards,<br>Team {brand_name}</p>',
+            'contact-enquiry' => [
+                'label' => 'Contact Enquiry',
+                'icon' => 'fa fa-envelope',
+                'desc' => 'Sent to the admin whenever someone submits the Contact Us form.',
+                'default_subject' => 'New contact enquiry from {name}',
+                'default_preview' => '{name} has sent a message through the Contact Us form.',
+                'default_body' => '<p>Hello Admin,</p>
+<p>You have received a new enquiry through the <strong>Contact Us</strong> form on {brand_name}.</p>
+<table cellpadding="6" cellspacing="0" border="0">
+<tr><td><strong>Name</strong></td><td>{name}</td></tr>
+<tr><td><strong>Email</strong></td><td>{email}</td></tr>
+<tr><td><strong>Phone</strong></td><td>{phone}</td></tr>
+<tr><td><strong>Request Type</strong></td><td>{request_type}</td></tr>
+<tr><td><strong>Submitted</strong></td><td>{submitted_at}</td></tr>
+</table>
+<p><strong>Message:</strong><br>{message}</p>',
                 'vars' => [
-                    '{customer_name}' => 'Customer Name',
-                    '{customer_email}' => 'Customer Email',
-                    '{customer_mobile}' => 'Customer Mobile',
-                    '{service}' => 'Service / Enquiry Type',
-                    '{message}' => 'Customer Message',
-                    '{brand_name}' => 'Brand Name',
-                    '{site_url}' => 'Website URL',
-                    '{logo_url}' => 'Logo URL',
-                ],
+                    '{name}' => 'Visitor Name',
+                    '{email}' => 'Visitor Email',
+                    '{phone}' => 'Visitor Phone',
+                    '{request_type}' => 'Request Type',
+                    '{message}' => 'Message',
+                ] + self::commonVars(),
                 'extras' => null,
-                'audience' => 'customer',
+                'audience' => 'admin',
             ],
-            'candidate-thank-you' => [
-                'label' => 'Candidate Thank You',
-                'icon' => 'fa fa-user-check',
-                'desc' => 'Sent to the candidate after a Career form submission, only when their mobile number is OTP verified.',
-                'default_subject' => 'Application received: {position} at {brand_name}',
-                'default_preview' => 'Thank you for applying. Our HR team will review your profile.',
-                'default_body' => '<p>Hi {candidate_name},</p>
-<p>Thank you for applying for the <strong>{position}</strong> position at {brand_name}. We have received your application and our HR team will review your profile.</p>
-<p>If your profile matches our requirements, we will contact you on <strong>{candidate_mobile}</strong>.</p>
-<p>Best regards,<br>HR Team, {brand_name}</p>',
+            'feedback' => [
+                'label' => 'Feedback & Suggestions',
+                'icon' => 'fa fa-comment-dots',
+                'desc' => 'Sent to the admin whenever someone submits the Feedback & Suggestions form.',
+                'default_subject' => 'New feedback from {name} ({outlet})',
+                'default_preview' => '{name} has shared feedback about the {outlet} outlet.',
+                'default_body' => '<p>Hello Admin,</p>
+<p>New feedback has been submitted on {brand_name}.</p>
+<table cellpadding="6" cellspacing="0" border="0">
+<tr><td><strong>Name</strong></td><td>{name}</td></tr>
+<tr><td><strong>Email</strong></td><td>{email}</td></tr>
+<tr><td><strong>Phone</strong></td><td>{phone}</td></tr>
+<tr><td><strong>Outlet</strong></td><td>{outlet}</td></tr>
+<tr><td><strong>Submitted</strong></td><td>{submitted_at}</td></tr>
+</table>
+<p><strong>Feedback:</strong><br>{message}</p>',
                 'vars' => [
-                    '{candidate_name}' => 'Candidate Name',
-                    '{candidate_email}' => 'Candidate Email',
-                    '{candidate_mobile}' => 'Candidate Mobile',
-                    '{position}' => 'Position Applied For',
-                    '{apply_type}' => 'Apply Type (Job / Internship)',
-                    '{brand_name}' => 'Brand Name',
-                    '{site_url}' => 'Website URL',
-                    '{logo_url}' => 'Logo URL',
-                ],
+                    '{name}' => 'Visitor Name',
+                    '{email}' => 'Visitor Email',
+                    '{phone}' => 'Visitor Phone',
+                    '{outlet}' => 'Outlet / Branch',
+                    '{message}' => 'Feedback Message',
+                ] + self::commonVars(),
                 'extras' => null,
-                'audience' => 'candidate',
+                'audience' => 'admin',
+            ],
+            'franchise-enquiry' => [
+                'label' => 'Franchise Enquiry',
+                'icon' => 'fa fa-handshake',
+                'desc' => 'Sent to the admin whenever someone submits the Franchise Enquiry form.',
+                'default_subject' => 'New franchise enquiry from {name} ({city})',
+                'default_preview' => '{name} from {city} is interested in a franchise.',
+                'default_body' => '<p>Hello Admin,</p>
+<p>A new <strong>franchise enquiry</strong> has been received on {brand_name}.</p>
+<table cellpadding="6" cellspacing="0" border="0">
+<tr><td><strong>Name</strong></td><td>{name}</td></tr>
+<tr><td><strong>Email</strong></td><td>{email}</td></tr>
+<tr><td><strong>Phone</strong></td><td>{phone}</td></tr>
+<tr><td><strong>City</strong></td><td>{city}</td></tr>
+<tr><td><strong>Budget</strong></td><td>{budget}</td></tr>
+<tr><td><strong>Submitted</strong></td><td>{submitted_at}</td></tr>
+</table>
+<p><strong>Message:</strong><br>{message}</p>',
+                'vars' => [
+                    '{name}' => 'Visitor Name',
+                    '{email}' => 'Visitor Email',
+                    '{phone}' => 'Visitor Phone',
+                    '{city}' => 'City',
+                    '{budget}' => 'Investment Budget',
+                    '{message}' => 'Message',
+                ] + self::commonVars(),
+                'extras' => null,
+                'audience' => 'admin',
             ],
         ];
     }

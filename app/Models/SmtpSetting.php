@@ -20,29 +20,19 @@ class SmtpSetting extends Model
         'reply_to_name',
         'reply_to_email',
 
-        // Admin recipients — Business / Service enquiry
-        'enquiry_admin_to',
-        'enquiry_admin_cc',
-
-        // Admin recipients — Career applications
-        'career_admin_to',
-        'career_admin_cc',
-
-        // Email event toggles
-        'customer_thank_you',
-        'candidate_thank_you',
-        'admin_customer_detail',
-        'admin_candidate_detail',
+        // Admin email notifications (one switch per enquiry type)
+        'notify_contact_enquiry',
+        'notify_feedback',
+        'notify_franchise_enquiry',
     ];
 
     protected $casts = [
         // Secret — stored encrypted (needs APP_KEY)
         'smtp_password' => 'encrypted',
 
-        'customer_thank_you' => 'boolean',
-        'candidate_thank_you' => 'boolean',
-        'admin_customer_detail' => 'boolean',
-        'admin_candidate_detail' => 'boolean',
+        'notify_contact_enquiry' => 'boolean',
+        'notify_feedback' => 'boolean',
+        'notify_franchise_enquiry' => 'boolean',
     ];
 
     /**
@@ -58,38 +48,13 @@ class SmtpSetting extends Model
     }
 
     /**
-     * Is an email event toggled on here?
-     * The matching EmailTemplate must also be enabled for customer/candidate
-     * thank-you mails (see EmailTemplate::active()).
+     * Should the admin be emailed for this event?
      *
-     * Events: customer_thank_you, candidate_thank_you,
-     *         admin_customer_detail, admin_candidate_detail
+     * Events: contact_enquiry, feedback, franchise_enquiry
+     * Usage:  SmtpSetting::getInstance()->shouldNotify('contact_enquiry')
      */
-    public function shouldSend(string $event): bool
+    public function shouldNotify(string $event): bool
     {
-        return (bool) ($this->{$event} ?? false);
-    }
-
-    /**
-     * Valid cc addresses as an array (comma or semicolon separated in DB).
-     */
-    public function enquiryCcList(): array
-    {
-        return self::splitEmails($this->enquiry_admin_cc);
-    }
-
-    public function careerCcList(): array
-    {
-        return self::splitEmails($this->career_admin_cc);
-    }
-
-    protected static function splitEmails(?string $value): array
-    {
-        $parts = preg_split('/[,;]+/', (string) $value) ?: [];
-
-        return array_values(array_filter(
-            array_map('trim', $parts),
-            fn ($email) => filter_var($email, FILTER_VALIDATE_EMAIL)
-        ));
+        return (bool) ($this->{'notify_' . $event} ?? false);
     }
 }

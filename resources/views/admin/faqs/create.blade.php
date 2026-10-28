@@ -30,4 +30,4 @@
     </div>
 </div>
 
-@include('admin.footer')e
+@include('admin.footer')

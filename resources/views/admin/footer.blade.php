@@ -23,7 +23,7 @@ body {
     margin-left: 0;
     padding: 12px 28px;
     background: #fff;
-    border-top: 1px solid #e3e5e8;
+    border-top: 2px solid #C49A45;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -38,7 +38,7 @@ body {
     align-items: center;
     gap: 6px;
 }
-.admin-footer-bar .footer-left strong { color: #303d89; font-weight: 600; }
+.admin-footer-bar .footer-left strong { color: #123F32; font-weight: 600; }
 .admin-footer-bar .footer-right {
     font-size: 12px;
     color: #8c9196;
@@ -46,15 +46,15 @@ body {
     align-items: center;
     gap: 6px;
 }
-.admin-footer-bar .footer-heart { color: #ef4444; font-size: 11px; }
-.admin-footer-bar a { color: #303d89; text-decoration: none; font-weight: 500; }
-.admin-footer-bar a:hover { text-decoration: underline; }
+.admin-footer-bar .footer-heart { color: #8B1E1E; font-size: 11px; }
+.admin-footer-bar a { color: #123F32; text-decoration: none; font-weight: 600; }
+.admin-footer-bar a:hover { color: #C49A45; text-decoration: underline; }
 </style>
 
 <!-- Footer bar -->
 <div class="admin-footer-bar">
     <div class="footer-left">
-        <i class="fa-solid fa-shield-halved" style="color:#303d89;font-size:11px"></i>
+        <i class="fa-solid fa-shield-halved" style="color:#C49A45;font-size:11px"></i>
         &copy; {{ date('Y') }} <strong>{{ $siteName }}</strong> — All rights reserved
     </div>
     <div class="footer-right">

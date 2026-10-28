@@ -28,9 +28,13 @@ return new class extends Migration {
             $table->text('business_address')->nullable();
             $table->string('business_hours')->nullable();
 
+            // Header (NEW)
+            $table->string('announcement_text')->nullable();   // top announcement bar text
+            $table->string('preloader_subtitle')->nullable();  // e.g. "Since 1955" under the preloader logo
 
             // Footer
             $table->text('footer_description')->nullable();
+            $table->string('footer_urdu_text')->nullable();    // NEW: Urdu line under the footer logo
             $table->string('footer_copyright')->nullable();
             $table->string('google_map_url')->nullable();
 

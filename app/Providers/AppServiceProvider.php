@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Outlet;
 use App\Models\SeoPage;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                     'seo' => $name ? SeoPage::forKey($name) : null,
                     // new Setting() avoids "property on null" errors if the row doesn't exist yet
                     'general' => Setting::first() ?? new Setting(),
+                    'navOutlets' => Outlet::active()->ordered()->get(),
                 ];
             }
 

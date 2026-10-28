@@ -11,15 +11,15 @@ use App\Http\Controllers\Admin\{
     RedirectController,
     SystemLogController,
     DashboardController,
+    GalleryImageController,
+    GalleryVideoController,
     NotificationController,
     MenuCategoryController,
     AdminSettingController,
     EmailTemplateController,
     ContactEnquiryController,
     ProfileSettingController,
-    FranchiseEnquiryController
-
-
+    FranchiseEnquiryController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -38,26 +38,22 @@ Route::middleware('maintenance.mode')->group(function () {
         Route::get('/blog/{slug}', 'blogDetail')->name('blog-detail');
         Route::get('/feedback', 'feedback')->name('feedback');
         Route::get('/franchise', 'franchise')->name('franchise');
+        Route::get('/our-outlets', 'ourOutlets')->name('our-outlets');
+        Route::get('/image-gallery', 'imageGallery')->name('image-gallery');
+        Route::get('/video-gallery', 'videoGallery')->name('video-gallery');
         Route::post('/contact', 'storeContact')->middleware('throttle:5,1')->name('contact.submit');
         Route::post('/feedback', 'storeFeedback')->middleware('throttle:5,1')->name('feedback.submit');
         Route::post('/franchise', 'storeFranchiseEnquiry')->middleware('throttle:5,1')->name('franchise.submit');
+        Route::get('/thank-you', 'thankYou')->name('thank-you');
 
         Route::view('/awards', 'front-pages.awards')->name('awards');
-        Route::view('/director-message', 'front-pages.director-message')->name('director-message');
-        Route::view('/image-gallery', 'front-pages.image-gallery')->name('image-gallery');
-        Route::view('/our-outlets', 'front-pages.our-outlets')->name('our-outlets');
         Route::view('/our-story', 'front-pages.our-story')->name('our-story');
-        Route::view('/signature-dishes', 'front-pages.signature-dishes')->name('signature-dishes');
-        Route::view('/video-gallery', 'front-pages.video-gallery')->name('video-gallery');
         Route::view('/wahid-legacy', 'front-pages.wahid-legacy')->name('wahid-legacy');
-
-
+        Route::view('/director-message', 'front-pages.director-message')->name('director-message');
+        Route::view('/signature-dishes', 'front-pages.signature-dishes')->name('signature-dishes');
     });
-    
+
 });
-
-
-
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
@@ -79,16 +75,39 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('blogs', BlogController::class)->names('blogs');
 
         Route::resource('outlets', OutletController::class)->except(['show']);
+
         Route::resource('contact-enquiries', ContactEnquiryController::class)->only(['index', 'show', 'destroy']);
 
         Route::resource('menu-categories', MenuCategoryController::class)->except(['show']);
         Route::resource('menu-items', MenuItemController::class)->except(['show']);
 
         Route::resource('feedbacks', FeedbackController::class)->only(['index', 'show', 'destroy']);
+
         Route::resource('franchise-enquiries', FranchiseEnquiryController::class)->only(['index', 'show', 'destroy']);
+
+        Route::resource('gallery-images', GalleryImageController::class)->except(['show']);
+
+        Route::resource('gallery-videos', GalleryVideoController::class)->except(['show']);
 
         Route::get('/seo', [SeoController::class, 'index'])->name('seo.index');
         Route::put('/seo/{id}', [SeoController::class, 'update'])->name('seo.update');
+
+        Route::get('/admin-setting', [AdminSettingController::class, 'index'])->name('admin-setting.index');
+        Route::post('/smtp-settings/store', [AdminSettingController::class, 'smtpSettingStore'])->name('smtp-settings.store');
+        Route::post('/settings/general', [AdminSettingController::class, 'generalSettingStore'])->name('settings.general.store');
+        Route::get('/settings/email-templates', [EmailTemplateController::class, 'index'])->name('settings.email-templates.index');
+        Route::post('settings/email-templates/test', [EmailTemplateController::class, 'sendTest'])->name('settings.email-templates.test');
+        Route::post('settings/email-templates/{eventKey}', [EmailTemplateController::class, 'save'])->name('settings.email-templates.save');
+
+        Route::get('/security/system-logs', [SystemLogController::class, 'index'])->name('security.system-logs');
+
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('index');
+            Route::post('/read-all', [NotificationController::class, 'markAllRead'])->name('read-all');
+            Route::delete('/clear-read', [NotificationController::class, 'clearRead'])->name('clear-read');
+            Route::post('/{notification}/read', [NotificationController::class, 'markRead'])->name('read');
+            Route::delete('/{notification}', [NotificationController::class, 'destroy'])->name('destroy');
+        });
 
         Route::prefix('redirect-settings')->name('redirect-settings.')->group(function () {
             Route::get('/', [RedirectController::class, 'index'])->name('index');
@@ -101,25 +120,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/export', [RedirectController::class, 'exportCsv'])->name('export');
             Route::get('/template', [RedirectController::class, 'downloadTemplate'])->name('template');
             Route::post('/import', [RedirectController::class, 'importCsv'])->name('import');
-        });
-
-        Route::get('/admin-setting', [AdminSettingController::class, 'index'])->name('admin-setting.index');
-        Route::post('/smtp-settings/store', [AdminSettingController::class, 'smtpSettingStore'])->name('smtp-settings.store');
-        Route::post('/settings/general', [AdminSettingController::class, 'generalSettingStore'])->name('settings.general.store');
-        Route::post('admin-setting/google-setting', [AdminSettingController::class, 'googleSettingStore'])->name('admin-setting.google-setting');
-
-        Route::get('settings/email-templates', [EmailTemplateController::class, 'getData'])->name('settings.email-templates.index');
-        Route::post('settings/email-templates/test', [EmailTemplateController::class, 'sendTest'])->name('settings.email-templates.test');
-        Route::post('settings/email-templates/{eventKey}', [EmailTemplateController::class, 'save'])->name('settings.email-templates.save');
-
-        Route::get('/security/system-logs', [SystemLogController::class, 'index'])->name('security.system-logs');
-
-        Route::prefix('notifications')->name('notifications.')->group(function () {
-            Route::get('/', [NotificationController::class, 'index'])->name('index');
-            Route::post('/read-all', [NotificationController::class, 'markAllRead'])->name('read-all');
-            Route::delete('/clear-read', [NotificationController::class, 'clearRead'])->name('clear-read');
-            Route::post('/{notification}/read', [NotificationController::class, 'markRead'])->name('read');
-            Route::delete('/{notification}', [NotificationController::class, 'destroy'])->name('destroy');
         });
 
         Route::get('/logout', [LogoutController::class, 'logout']);

@@ -31,27 +31,10 @@ return new class extends Migration
             $table->string('reply_to_name')->nullable();
             $table->string('reply_to_email')->nullable();
 
-            // ── Admin recipients: Business / Service enquiry ─────────────────
-            $table->string('enquiry_admin_to')->nullable()
-                  ->comment('e.g. business@webmingo.com');
-            $table->string('enquiry_admin_cc')->nullable()
-                  ->comment('e.g. webmingo@gmail.com, comma separated if multiple');
-
-            // ── Admin recipients: Career applications ────────────────────────
-            $table->string('career_admin_to')->nullable()
-                  ->comment('e.g. hr@webmingo.com');
-            $table->string('career_admin_cc')->nullable()
-                  ->comment('e.g. hr.webmingo@gmail.com, comma separated if multiple');
-
-            // ── Email event toggles ──────────────────────────────────────────
-            $table->boolean('customer_thank_you')->default(true)
-                  ->comment('Thank you email to customer, only if mobile verified');
-            $table->boolean('candidate_thank_you')->default(true)
-                  ->comment('Thank you email to candidate, only if mobile verified');
-            $table->boolean('admin_customer_detail')->default(true)
-                  ->comment('Customer detail email to admin on every enquiry');
-            $table->boolean('admin_candidate_detail')->default(true)
-                  ->comment('Candidate detail + resume email to admin on every application');
+            // ── Admin email notifications (one switch per enquiry type) ─────
+            $table->boolean('notify_contact_enquiry')->default(true);
+            $table->boolean('notify_feedback')->default(true);
+            $table->boolean('notify_franchise_enquiry')->default(true);
 
             $table->timestamps();
         });

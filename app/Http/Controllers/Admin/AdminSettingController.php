@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Setting;
-use App\Models\SmsSetting;
 use App\Models\SmtpSetting;
 use Illuminate\Http\Request;
-use App\Models\GoogleSetting;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,8 +18,6 @@ class AdminSettingController extends Controller
         $smtp = SmtpSetting::first();
         $general = Setting::first();
         $states = State::all();
-        $google_setting = GoogleSetting::current();
-        $settings = SmsSetting::first();
         $activeTab = $request->tab ?? 'general';
 
         return view(
@@ -30,8 +26,6 @@ class AdminSettingController extends Controller
                 'smtp',
                 'general',
                 'states',
-                'google_setting',
-                'settings',
                 'activeTab'
             )
         );
@@ -48,17 +42,6 @@ class AdminSettingController extends Controller
     {
         $existing = SmtpSetting::first();
 
-        // CC fields accept one or more emails separated by comma / semicolon
-        $ccRule = function (string $attribute, $value, \Closure $fail) {
-            foreach (preg_split('/[,;]+/', (string) $value) as $email) {
-                $email = trim($email);
-
-                if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $fail("'{$email}' is not a valid email address in the CC field.");
-                }
-            }
-        };
-
         $validated = $request->validate([
             'smtp_host' => 'required|string|max:255',
             'smtp_port' => 'required|integer',
@@ -70,15 +53,6 @@ class AdminSettingController extends Controller
             'from_email' => 'nullable|email|max:255',
             'reply_to_name' => 'nullable|string|max:255',
             'reply_to_email' => 'nullable|email|max:255',
-
-            // Admin recipients
-            'enquiry_admin_to' => 'required|email|max:255',
-            'enquiry_admin_cc' => ['nullable', 'string', 'max:500', $ccRule],
-            'career_admin_to' => 'required|email|max:255',
-            'career_admin_cc' => ['nullable', 'string', 'max:500', $ccRule],
-        ], [
-            'enquiry_admin_to.required' => 'Enquiry admin email (To) is required.',
-            'career_admin_to.required' => 'Career admin email (To) is required.',
         ]);
 
         // Keep the existing password when the field was left blank
@@ -86,11 +60,10 @@ class AdminSettingController extends Controller
             unset($validated['smtp_password']);
         }
 
-        // Email event toggles
-        $validated['customer_thank_you'] = $request->has('customer_thank_you');
-        $validated['candidate_thank_you'] = $request->has('candidate_thank_you');
-        $validated['admin_customer_detail'] = $request->has('admin_customer_detail');
-        $validated['admin_candidate_detail'] = $request->has('admin_candidate_detail');
+        // Admin email notification toggles
+        $validated['notify_contact_enquiry'] = $request->has('notify_contact_enquiry');
+        $validated['notify_feedback'] = $request->has('notify_feedback');
+        $validated['notify_franchise_enquiry'] = $request->has('notify_franchise_enquiry');
 
         // Update the existing row (updateOrCreate(['id' => 1]) would insert a new row
         // whenever the saved row's id is not 1, because id is not mass assignable)
@@ -116,8 +89,16 @@ class AdminSettingController extends Controller
             'business_address' => 'nullable|string',
             'business_hours' => 'nullable|string|max:255',
             'google_map_url' => 'nullable|string|max:2000',
+
+            // Header
+            'announcement_text' => 'nullable|string|max:255',
+            'preloader_subtitle' => 'nullable|string|max:100',
+
+            // Footer
             'footer_description' => 'nullable|string',
+            'footer_urdu_text' => 'nullable|string|max:255',
             'footer_copyright' => 'nullable|string|max:255',
+
             'facebook' => 'nullable|url|max:255',
             'instagram' => 'nullable|url|max:255',
             'twitter' => 'nullable|url|max:255',
@@ -127,6 +108,7 @@ class AdminSettingController extends Controller
             'currency' => 'nullable|string|max:10',
             'currency_symbol' => 'nullable|string|max:10',
             'timezone' => 'nullable|string|max:100',
+            'admin_session_timeout' => 'nullable|integer|min:1|max:1440',
             'header_logo' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
             'footer_logo' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
             'favicon' => 'nullable|image|mimes:jpg,jpeg,png,ico,webp|max:1024',
@@ -141,7 +123,10 @@ class AdminSettingController extends Controller
             }
         }
 
-        $validated['maintenance_mode']= $request->has('maintenance_mode');
+        $validated['maintenance_mode'] = $request->has('maintenance_mode');
+
+        // The column has a default of 60, so never send null
+        $validated['admin_session_timeout'] = $validated['admin_session_timeout'] ?? 60;
 
         // Header Logo
         if ($request->hasFile('header_logo')) {
@@ -192,63 +177,6 @@ class AdminSettingController extends Controller
             'success',
             'General settings updated successfully.'
         );
-    }
-
-    public function googleSettingStore(Request $request)
-    {
-        $request->validate([
-            'gtm_container_id' => 'nullable|string|max:50',
-            'ga4_measurement_id' => 'nullable|string|max:50',
-            'gads_conversion_id' => 'nullable|string|max:50',
-            'meta_pixel_id' => 'nullable|string|max:50',
-            'gsc_verify_method' => 'nullable|in:meta,file,dns',
-            'gads_currency' => 'nullable|string|max:5',
-        ]);
-
-        $checkboxFields = [
-            'gtm_enabled',
-            'gtm_all_pages',
-            'gtm_datalayer_events',
-            'ga4_enabled',
-            'ga4_ev_view_item',
-            'ga4_ev_add_to_cart',
-            'ga4_ev_remove_from_cart',
-            'ga4_ev_begin_checkout',
-            'ga4_ev_add_payment',
-            'ga4_ev_purchase',
-            'ga4_ev_refund',
-            'ga4_ev_search',
-            'ga4_ev_login',
-            'ga4_ev_sign_up',
-            'gads_enabled',
-            'gads_enhanced_conversions',
-            'gads_send_order_value',
-            'gsc_auto_sitemap',
-            'meta_enabled',
-            'meta_ev_page_view',
-            'meta_ev_view_content',
-            'meta_ev_add_to_cart',
-            'meta_ev_add_to_wishlist',
-            'meta_ev_initiate_checkout',
-            'meta_ev_add_payment',
-            'meta_ev_purchase',
-            'meta_ev_lead',
-            'meta_ev_complete_reg',
-            'meta_ev_search',
-            'meta_advanced_matching',
-        ];
-
-        $data = $request->except(['_token']);
-
-        foreach ($checkboxFields as $field) {
-            $data[$field] = $request->boolean($field);
-        }
-
-        GoogleSetting::updateOrCreate(['id' => 1], $data);
-
-        return redirect()
-            ->route('admin.admin-setting.index', ['tab' => 'tracking'])
-            ->with('success', 'Tracking settings saved successfully.');
     }
 
 }

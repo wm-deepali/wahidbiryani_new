@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('admin.outlets.update', $outlet->id) }}" method="POST">
+            <form action="{{ route('admin.outlets.update', $outlet->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('admin.outlets._form', ['outlet' => $outlet])

@@ -4,18 +4,15 @@
 
 @section('content')
 
-    <!-- Page Header (Exact breadcrum.text Structure) -->
+    <!-- Page Header -->
     <section class="section-padding text-center heritage-page-header position-relative overflow-hidden bg-ivory"
-        style="padding-top: 180px" ;>
+        style="padding-top: 180px;">
 
-        <!-- Subtle Pattern -->
-        <div class=" sig-jaali-overlay" style="opacity: 0.05; z-index: 1;">
-        </div>
+        <div class="sig-jaali-overlay" style="opacity: 0.05; z-index: 1;"></div>
 
         <div class="container position-relative" style="z-index: 5;">
             <div class="heritage-title-box">
 
-                <!-- Royal Breadcrumb -->
                 <nav aria-label="breadcrumb" class="reveal-up mb-4 d-flex justify-content-center">
                     <div class="royal-breadcrumb-wrapper"
                         style="background: rgba(196,154,69,0.05); border-color: rgba(196,154,69,0.25);">
@@ -32,7 +29,7 @@
                     Outlets
                 </h1>
                 <p class="section-desc reveal-up mx-auto text-dark" style="max-width: 600px; opacity: 0.85;">Experience the
-                    royal feast of Awadh across our iconic Lucknow locations in Aminabad, Hazratganj, and Chowk.</p>
+                    royal feast of Awadh across our iconic Lucknow locations.</p>
 
                 <div class="hero-ornament reveal-up" style="opacity: 1; transform: none; margin-top: 30px;">
                     <svg width="220" height="20" viewBox="0 0 220 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,386 +46,126 @@
         <div class="container position-relative" style="z-index: 2;">
             <div class="outlet-showcase-container">
 
-                <!-- Outlet 1: Aminabad -->
-                <div class="outlet-card reveal-up">
-                    <div class="outlet-card-inner">
+                @forelse($outlets as $outlet)
+                    <div class="outlet-card {{ $loop->even ? 'reverse-row' : '' }} reveal-up">
+                        <div class="outlet-card-inner">
 
-                        <!-- Content Side -->
-                        <div class="outlet-content-side">
-                            <div>
-                                <div class="outlet-top-meta">
-                                    <span class="outlet-badge flagship"><i class="fa-solid fa-crown me-1"></i> Since 1955 •
-                                        Pride of
-                                        Lucknow</span>
-                                    <span class="outlet-urdu-title">امین آباد</span>
+                            <!-- Content Side -->
+                            <div class="outlet-content-side">
+                                <div>
+                                    <div class="outlet-top-meta">
+                                        @if($outlet->badge_text)
+                                            <span class="outlet-badge {{ $outlet->is_flagship ? 'flagship' : '' }}">
+                                                <i class="{{ $outlet->badge_icon }} me-1"></i> {{ $outlet->badge_text }}
+                                            </span>
+                                        @endif
+                                        @if($outlet->urdu_name)
+                                            <span class="outlet-urdu-title">{{ $outlet->urdu_name }}</span>
+                                        @endif
+                                    </div>
+
+                                    <h2 class="outlet-title">{{ $outlet->title ?: $outlet->name }}</h2>
+                                    @if($outlet->subtitle)
+                                        <h3 class="outlet-subtitle">{{ $outlet->subtitle }}</h3>
+                                    @endif
+                                    @if($outlet->description)
+                                        <p class="outlet-desc">{{ $outlet->description }}</p>
+                                    @endif
+
+                                    <!-- Amenities -->
+                                    @if(!empty($outlet->amenities))
+                                        <div class="outlet-amenities">
+                                            @foreach($outlet->amenities as $amenity)
+                                                <span class="outlet-amenity-chip">
+                                                    <i class="{{ $amenity['icon'] ?? 'fa-solid fa-check' }}"></i> {{ $amenity['label'] }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    <!-- Info Grid -->
+                                    <div class="outlet-info-grid">
+                                        <div class="outlet-info-item">
+                                            <i class="fa-solid fa-location-dot outlet-info-icon"></i>
+                                            <div class="outlet-info-text">
+                                                <strong>Address</strong>
+                                                <span>{{ $outlet->address }}</span>
+                                            </div>
+                                        </div>
+
+                                        @if($outlet->prep_time)
+                                            <div class="outlet-info-item">
+                                                <i class="fa-regular fa-clock outlet-info-icon"></i>
+                                                <div class="outlet-info-text">
+                                                    <strong>Food Preparation Time</strong>
+                                                    <span>{{ $outlet->prep_time }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if(count($outlet->phone_list))
+                                            <div class="outlet-info-item">
+                                                <i class="fa-solid fa-phone outlet-info-icon"></i>
+                                                <div class="outlet-info-text">
+                                                    <strong>Direct Phone</strong>
+                                                    <span>
+                                                        @foreach($outlet->phone_list as $phone)
+                                                            <a href="{{ $phone['href'] }}" class="text-decoration-none"
+                                                                style="color: inherit;">{{ $phone['label'] }}</a>@if(!$loop->last), @endif
+                                                        @endforeach
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($outlet->order_platforms)
+                                            <div class="outlet-info-item">
+                                                <i class="fa-solid fa-bag-shopping outlet-info-icon"></i>
+                                                <div class="outlet-info-text">
+                                                    <strong>Order Online On</strong>
+                                                    <span>{{ $outlet->order_platforms }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <h2 class="outlet-title">Wahid Biryani Aminabad</h2>
-                                <h3 class="outlet-subtitle">The Real Taste of Mughlai Cuisine</h3>
-                                <p class="outlet-desc">
-                                    Wahid Biryani, the Pride of Lucknow since 1955, welcomes you at its Aminabad outlet on
-                                    Naaz Cinema
-                                    Road. Enjoy authentic Mughlai cuisine, from Dum Biryani and legendary Kababs to rich
-                                    curries and
-                                    breads, prepared with the legacy of four generations of the Quraishi family.
-                                </p>
-
-                                <!-- Amenities Pills -->
-                                <div class="outlet-amenities">
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-award"></i> Since 1955</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-certificate"></i> ISO
-                                        Certified</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-bag-shopping"></i> Swiggy &
-                                        Zomato</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-oil-can"></i> Fortune Soyabean
-                                        Oil</span>
-                                </div>
-
-                                <!-- Info Grid -->
-                                <div class="outlet-info-grid">
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-location-dot outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Address</strong>
-                                            <span>Naaz Cinema Road, Aminabad, Lucknow</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-regular fa-clock outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Food Preparation Time</strong>
-                                            <span>15 – 20 Minutes</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-phone outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Direct Phone</strong>
-                                            <span>0522-2611878, +91 9236613111</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-bag-shopping outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Order Online On</strong>
-                                            <span>Swiggy & Zomato</span>
-                                        </div>
-                                    </div>
+                                <!-- Action Buttons -->
+                                <div class="outlet-actions">
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
+                                        class="btn btn-burgundy-fill magnetic-btn"><i
+                                            class="fa-solid fa-utensils me-2"></i>Order Online</a>
+                                    @if($outlet->whatsapp_order_url)
+                                        <a href="{{ $outlet->whatsapp_order_url }}" target="_blank" rel="noopener noreferrer"
+                                            class="btn btn-whatsapp magnetic-btn"><i
+                                                class="fa-brands fa-whatsapp me-2"></i>WhatsApp Order</a>
+                                    @endif
+                                    <a href="{{ $outlet->directions_url }}" target="_blank" rel="noopener noreferrer"
+                                        class="btn btn-gold-outline magnetic-btn"><i
+                                            class="fa-solid fa-location-arrow me-2"></i>Get Directions</a>
                                 </div>
                             </div>
 
-                            <!-- Action Buttons -->
-                            <div class="outlet-actions">
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
-                                    class="btn btn-burgundy-fill magnetic-btn"><i
-                                        class="fa-solid fa-utensils me-2"></i>Order Online</a>
-                                <a href="https://wa.me/919236613111?text=Hello%20Wahid%20Biryani%2C%20I%20would%20like%20to%20order%20from%20Aminabad%20Outlet."
-                                    target="_blank" class="btn btn-whatsapp magnetic-btn"><i
-                                        class="fa-brands fa-whatsapp me-2"></i>WhatsApp Order</a>
-                                <a href="https://maps.google.com/?q=Wahid+Biryani+Naaz+Cinema+Road+Aminabad+Lucknow"
-                                    target="_blank" class="btn btn-gold-outline magnetic-btn"><i
-                                        class="fa-solid fa-location-arrow me-2"></i>Get
-                                    Directions</a>
-                            </div>
+                            <!-- Visual Side -->
+                            @if($outlet->image)
+                                <div class="outlet-visual-side">
+                                    <img loading="lazy" src="{{ asset($outlet->image) }}"
+                                        alt="{{ $outlet->title ?: $outlet->name }}">
+                                    <div class="outlet-visual-overlay"></div>
+                                    @if($outlet->tag_text)
+                                        <div class="outlet-floating-tag">
+                                            <span>{{ $outlet->tag_text }}</span>
+                                            <i class="{{ $outlet->tag_icon }} tag-icon"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+
                         </div>
-
-                        <!-- Visual Side -->
-                        <div class="outlet-visual-side">
-                            <img loading="lazy" src="assets/img/Aminabad.png" alt="Wahid Biryani Aminabad Outlet">
-                            <div class="outlet-visual-overlay"></div>
-                            <div class="outlet-floating-tag">
-                                <span>✦ Aminabad Outlet • Since 1955</span>
-                                <i class="fa-solid fa-crown tag-icon"></i>
-                            </div>
-                        </div>
-
                     </div>
-                </div>
-
-                <!-- Outlet 2: Nazirabad - Reverse Row -->
-                <div class="outlet-card reverse-row reveal-up">
-                    <div class="outlet-card-inner">
-
-                        <!-- Content Side -->
-                        <div class="outlet-content-side">
-                            <div>
-                                <div class="outlet-top-meta">
-                                    <span class="outlet-badge"><i class="fa-solid fa-hotel me-1"></i> Wahid Biryani
-                                        Outlet</span>
-                                    <span class="outlet-urdu-title">نظیر آباد</span>
-                                </div>
-
-                                <h2 class="outlet-title">Wahid Biryani Nazirabad</h2>
-                                <h3 class="outlet-subtitle">Har Mehfil Ki Shaan</h3>
-                                <p class="outlet-desc">
-                                    Find Wahid Biryani at Medicine Market, Nazirabad. Savour our signature Biryani, Kababs,
-                                    Mughlai
-                                    curries and breads, made fresh in the true Mughlai tradition that has made us the Pride
-                                    of Lucknow
-                                    since 1955.
-                                </p>
-
-                                <!-- Amenities Pills -->
-                                <div class="outlet-amenities">
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-award"></i> Since 1955</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-certificate"></i> ISO
-                                        Certified</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-bag-shopping"></i> Swiggy &
-                                        Zomato</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-champagne-glasses"></i> Catering
-                                        Services</span>
-                                </div>
-
-                                <!-- Info Grid -->
-                                <div class="outlet-info-grid">
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-location-dot outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Address</strong>
-                                            <span>Medicine Market, Nazirabad, Lucknow</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-regular fa-clock outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Food Preparation Time</strong>
-                                            <span>15 – 20 Minutes</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-phone outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Direct Phone</strong>
-                                            <span>+91 8896612786, +91 9984700333</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-bag-shopping outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Order Online On</strong>
-                                            <span>Swiggy & Zomato</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="outlet-actions">
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
-                                    class="btn btn-burgundy-fill magnetic-btn"><i
-                                        class="fa-solid fa-utensils me-2"></i>Order Online</a>
-                                <a href="https://wa.me/918896612786?text=Hello%20Wahid%20Biryani%2C%20I%20would%20like%20to%20order%20from%20Nazirabad%20Outlet."
-                                    target="_blank" class="btn btn-whatsapp magnetic-btn"><i
-                                        class="fa-brands fa-whatsapp me-2"></i>WhatsApp Order</a>
-                                <a href="https://maps.google.com/?q=Wahid+Biryani+Medicine+Market+Nazirabad+Lucknow"
-                                    target="_blank" class="btn btn-gold-outline magnetic-btn"><i
-                                        class="fa-solid fa-location-arrow me-2"></i>Get
-                                    Directions</a>
-                            </div>
-                        </div>
-
-                        <!-- Visual Side -->
-                        <div class="outlet-visual-side">
-                            <img loading="lazy" src="assets/img/naziradbadd.png" alt="Wahid Biryani Nazirabad Outlet">
-                            <div class="outlet-visual-overlay"></div>
-                            <div class="outlet-floating-tag">
-                                <span>✦ Nazirabad Outlet • Har Mehfil Ki Shaan</span>
-                                <i class="fa-solid fa-star tag-icon"></i>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Outlet 3: Bangla Bazar -->
-                <div class="outlet-card reveal-up">
-                    <div class="outlet-card-inner">
-
-                        <!-- Content Side -->
-                        <div class="outlet-content-side">
-                            <div>
-                                <div class="outlet-top-meta">
-                                    <span class="outlet-badge"><i class="fa-solid fa-fire me-1"></i> Wahid Biryani
-                                        Outlet</span>
-                                    <span class="outlet-urdu-title">بنگلہ بازار</span>
-                                </div>
-
-                                <h2 class="outlet-title">Wahid Biryani Bangla Bazar</h2>
-                                <h3 class="outlet-subtitle">Pride of Lucknow Since 1955</h3>
-                                <p class="outlet-desc">
-                                    Visit our Bangla Bazar outlet at Ambika Vikar, Sector J, Ashiyana. Enjoy Wahid Biryani's
-                                    famous
-                                    Mughlai flavours, from Galavati and Boti Kababs to Biryani, Rolls and fresh breads,
-                                    served in the
-                                    tradition of four generations.
-                                </p>
-
-                                <!-- Amenities Pills -->
-                                <div class="outlet-amenities">
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-award"></i> Since 1955</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-certificate"></i> ISO
-                                        Certified</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-bag-shopping"></i> Swiggy &
-                                        Zomato</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-handshake"></i> Franchise
-                                        Available</span>
-                                </div>
-
-                                <!-- Info Grid -->
-                                <div class="outlet-info-grid">
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-location-dot outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Address</strong>
-                                            <span>Ambika Vikar, Sector J, Ashiyana, Lucknow</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-regular fa-clock outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Food Preparation Time</strong>
-                                            <span>15 – 20 Minutes</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-phone outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Direct Phone</strong>
-                                            <span>+91 9648931111, +91 9198817222, +91 6390786444</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-bag-shopping outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Order Online On</strong>
-                                            <span>Swiggy & Zomato</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="outlet-actions">
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
-                                    class="btn btn-burgundy-fill magnetic-btn"><i
-                                        class="fa-solid fa-utensils me-2"></i>Order Online</a>
-                                <a href="https://wa.me/919648931111?text=Hello%20Wahid%20Biryani%2C%20I%20would%20like%20to%20order%20from%20Bangla%20Bazar%20Outlet."
-                                    target="_blank" class="btn btn-whatsapp magnetic-btn"><i
-                                        class="fa-brands fa-whatsapp me-2"></i>WhatsApp Order</a>
-                                <a href="https://maps.google.com/?q=Wahid+Biryani+Ambika+Vikar+Sector+J+Ashiyana+Lucknow"
-                                    target="_blank" class="btn btn-gold-outline magnetic-btn"><i
-                                        class="fa-solid fa-location-arrow me-2"></i>Get
-                                    Directions</a>
-                            </div>
-                        </div>
-
-                        <!-- Visual Side -->
-                        <div class="outlet-visual-side">
-                            <img loading="lazy" src="assets/img/Bangla.png" alt="Wahid Biryani Bangla Bazar Outlet">
-                            <div class="outlet-visual-overlay"></div>
-                            <div class="outlet-floating-tag">
-                                <span>✦ Bangla Bazar Outlet</span>
-                                <i class="fa-solid fa-fire tag-icon"></i>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Outlet 4: Munshi Pulia - Reverse Row -->
-                <div class="outlet-card reverse-row reveal-up">
-                    <div class="outlet-card-inner">
-
-                        <!-- Content Side -->
-                        <div class="outlet-content-side">
-                            <div>
-                                <div class="outlet-top-meta">
-                                    <span class="outlet-badge"><i class="fa-solid fa-hotel me-1"></i> Wahid Biryani
-                                        Outlet</span>
-                                    <span class="outlet-urdu-title">منشی پلیا</span>
-                                </div>
-
-                                <h2 class="outlet-title">Wahid Biryani Munshi Pulia</h2>
-                                <h3 class="outlet-subtitle">4th Generation of Legacy</h3>
-                                <p class="outlet-desc">
-                                    Located at D-Block, Indira Nagar, near Jwala Hospital, our Munshi Pulia outlet brings
-                                    you the real
-                                    taste of Mughlai cuisine. Dine on our signature Biryani, Kababs and curries, backed by a
-                                    legacy of
-                                    four generations.
-                                </p>
-
-                                <!-- Amenities Pills -->
-                                <div class="outlet-amenities">
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-award"></i> Since 1955</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-certificate"></i> ISO
-                                        Certified</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-bag-shopping"></i> Swiggy &
-                                        Zomato</span>
-                                    <span class="outlet-amenity-chip"><i class="fa-solid fa-champagne-glasses"></i> Catering
-                                        Services</span>
-                                </div>
-
-                                <!-- Info Grid -->
-                                <div class="outlet-info-grid">
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-location-dot outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Address</strong>
-                                            <span>D-Block, Indira Nagar, Near Jwala Hospital, Munshi Pulia, Lucknow</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-regular fa-clock outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Food Preparation Time</strong>
-                                            <span>15 – 20 Minutes</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-phone outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Direct Phone</strong>
-                                            <span>+91 7607837666, +91 8174867555</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlet-info-item">
-                                        <i class="fa-solid fa-bag-shopping outlet-info-icon"></i>
-                                        <div class="outlet-info-text">
-                                            <strong>Order Online On</strong>
-                                            <span>Swiggy & Zomato</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="outlet-actions">
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
-                                    class="btn btn-burgundy-fill magnetic-btn"><i
-                                        class="fa-solid fa-utensils me-2"></i>Order Online</a>
-                                <a href="https://wa.me/917607837666?text=Hello%20Wahid%20Biryani%2C%20I%20would%20like%20to%20order%20from%20Munshi%20Pulia%20Outlet."
-                                    target="_blank" class="btn btn-whatsapp magnetic-btn"><i
-                                        class="fa-brands fa-whatsapp me-2"></i>WhatsApp Order</a>
-                                <a href="https://maps.google.com/?q=Wahid+Biryani+Indira+Nagar+Munshi+Pulia+Lucknow"
-                                    target="_blank" class="btn btn-gold-outline magnetic-btn"><i
-                                        class="fa-solid fa-location-arrow me-2"></i>Get
-                                    Directions</a>
-                            </div>
-                        </div>
-
-                        <!-- Visual Side -->
-                        <div class="outlet-visual-side">
-                            <img loading="lazy" src="assets/img/munshi-pulia.png" alt="Wahid Biryani Munshi Pulia Outlet">
-                            <div class="outlet-visual-overlay"></div>
-                            <div class="outlet-floating-tag">
-                                <span>✦ Munshi Pulia Outlet</span>
-                                <i class="fa-solid fa-star tag-icon"></i>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                @empty
+                    <p class="text-center text-dark opacity-75">Our outlet details will be available soon.</p>
+                @endforelse
 
             </div>
         </div>

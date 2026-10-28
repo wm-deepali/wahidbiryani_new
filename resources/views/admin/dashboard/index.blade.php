@@ -200,11 +200,6 @@
     color: var(--red);
   }
 
-  .kpi-badge.warn {
-    background: var(--amber-bg);
-    color: var(--amber);
-  }
-
   .kpi-badge.info {
     background: var(--blue-bg);
     color: var(--blue);
@@ -341,6 +336,16 @@
     white-space: nowrap;
   }
 
+  .type-tag.feedback {
+    color: var(--green);
+    background: var(--green-bg);
+  }
+
+  .type-tag.franchise {
+    color: var(--amber);
+    background: var(--amber-bg);
+  }
+
   .view-link {
     font-size: 12.5px;
     font-weight: 600;
@@ -348,67 +353,7 @@
     text-decoration: none;
   }
 
-  .vdot {
-    font-size: 11px;
-    margin-left: 4px;
-  }
-
-  .vdot.yes {
-    color: var(--green);
-  }
-
-  .vdot.no {
-    color: var(--amber);
-  }
-
-  /* ── Status badges ──────────────────────────────────────────── */
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11.5px;
-    font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 20px;
-    text-transform: capitalize;
-  }
-
-  .status-pill::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .status-pill.delivered {
-    background: var(--green-bg);
-    color: var(--green);
-  }
-
-  .status-pill.delivered::before {
-    background: var(--green);
-  }
-
-  .status-pill.pending {
-    background: var(--amber-bg);
-    color: var(--amber);
-  }
-
-  .status-pill.pending::before {
-    background: var(--amber);
-  }
-
-  .status-pill.processing {
-    background: var(--blue-bg);
-    color: var(--blue);
-  }
-
-  .status-pill.processing::before {
-    background: var(--blue);
-  }
-
-  /* ── Ranked lists ───────────────────────────────────────────── */
+  /* ── Ranked / quick lists ───────────────────────────────────── */
   .product-rank-item {
     display: flex;
     align-items: center;
@@ -423,16 +368,15 @@
   }
 
   .product-rank-item .rank {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--bg);
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--accent-light);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-secondary);
+    font-size: 12px;
+    color: var(--accent);
     flex-shrink: 0;
     margin-right: 10px;
   }
@@ -441,6 +385,7 @@
     flex: 1;
     font-weight: 500;
     color: var(--text-primary);
+    text-decoration: none;
   }
 
   .product-rank-item .qty {
@@ -487,6 +432,18 @@
   <div class="container-fluid">
     <div class="content-area">
 
+      @php
+        // Small helper for the "vs last month" badges
+        $changeBadge = function ($change) {
+            if ($change === null) {
+                return '<span class="kpi-badge info">New this month</span>';
+            }
+            $up = $change >= 0;
+            return '<span class="kpi-badge ' . ($up ? 'up' : 'down') . '"><i class="fa fa-arrow-' . ($up ? 'up' : 'down') . '"></i> '
+                . abs($change) . '%</span><span class="kpi-sub">vs last month</span>';
+        };
+      @endphp
+
       <!-- Page header -->
       <div class="dash-page-header">
         <div>
@@ -499,10 +456,205 @@
         </div>
       </div>
 
-    
+      <!-- KPI cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon purple"><i class="fa fa-inbox"></i></div>
+          <div class="kpi-label">All Submissions</div>
+          <div class="kpi-value">{{ number_format($totals['all']) }}</div>
+          <span class="kpi-badge info">{{ $totals['month'] }} this month</span>
+          {!! $changeBadge($totals['change']) !!}
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon blue"><i class="fa fa-envelope"></i></div>
+          <div class="kpi-label">Contact Enquiries</div>
+          <div class="kpi-value">{{ number_format($kpi['contact']['total']) }}</div>
+          <span class="kpi-badge info">{{ $kpi['contact']['month'] }} this month</span>
+          {!! $changeBadge($kpi['contact']['change']) !!}
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon green"><i class="fa fa-comment-dots"></i></div>
+          <div class="kpi-label">Feedback &amp; Suggestions</div>
+          <div class="kpi-value">{{ number_format($kpi['feedback']['total']) }}</div>
+          <span class="kpi-badge info">{{ $kpi['feedback']['month'] }} this month</span>
+          {!! $changeBadge($kpi['feedback']['change']) !!}
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon amber"><i class="fa fa-handshake"></i></div>
+          <div class="kpi-label">Franchise Enquiries</div>
+          <div class="kpi-value">{{ number_format($kpi['franchise']['total']) }}</div>
+          <span class="kpi-badge info">{{ $kpi['franchise']['month'] }} this month</span>
+          {!! $changeBadge($kpi['franchise']['change']) !!}
+        </div>
+      </div>
+
+      <div class="main-grid">
+
+        <!-- LEFT: chart + recent -->
+        <div class="stack">
+
+          <div class="cardx">
+            <div class="cardx-head">
+              <h5>Submissions — Last 30 Days</h5>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="submissionsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="cardx">
+            <div class="cardx-head">
+              <h5>Recent Submissions</h5>
+            </div>
+
+            @if($recent->isEmpty())
+              <p class="empty-note">No submissions yet. They will appear here as visitors use the forms.</p>
+            @else
+              <div style="overflow-x:auto">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Name</th>
+                      <th>Details</th>
+                      <th>Received</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($recent as $row)
+                      <tr>
+                        <td><span class="type-tag {{ strtolower($row['type']) }}">{{ $row['type'] }}</span></td>
+                        <td>
+                          {{ $row['name'] }}
+                          <span class="sub">{{ $row['phone'] }}</span>
+                        </td>
+                        <td>{{ $row['detail'] ?: '—' }}</td>
+                        <td>
+                          {{ $row['at']->format('d M, g:i A') }}
+                          <span class="sub">{{ $row['at']->diffForHumans() }}</span>
+                        </td>
+                        <td><a href="{{ $row['url'] }}" class="view-link">View</a></td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            @endif
+          </div>
+
+        </div>
+
+        <!-- RIGHT: breakdowns + content -->
+        <div class="stack">
+
+          <div class="cardx">
+            <div class="cardx-head">
+              <h5>Franchise Budgets</h5>
+              <a href="{{ route('admin.franchise-enquiries.index') }}">View all</a>
+            </div>
+            @forelse($budgets as $budget => $count)
+              <div class="progress-row">
+                <div class="progress-label">
+                  <span>{{ $budget ?: 'Not specified' }}</span>
+                  <span>{{ $count }}</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width: {{ round(($count / $budgetMax) * 100) }}%; background: var(--amber);"></div>
+                </div>
+              </div>
+            @empty
+              <p class="empty-note">No franchise enquiries yet.</p>
+            @endforelse
+          </div>
+
+          <div class="cardx">
+            <div class="cardx-head">
+              <h5>Feedback by Outlet</h5>
+              <a href="{{ route('admin.feedbacks.index') }}">View all</a>
+            </div>
+            @forelse($feedbackByOutlet as $outlet => $count)
+              <div class="progress-row">
+                <div class="progress-label">
+                  <span>{{ $outlet ?: 'Not specified' }}</span>
+                  <span>{{ $count }}</span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" style="width: {{ round(($count / $feedbackMax) * 100) }}%; background: var(--green);"></div>
+                </div>
+              </div>
+            @empty
+              <p class="empty-note">No feedback yet.</p>
+            @endforelse
+          </div>
+
+          <div class="cardx">
+            <div class="cardx-head">
+              <h5>Website Content</h5>
+            </div>
+            @foreach($content as $item)
+              <div class="product-rank-item">
+                <span class="rank"><i class="fa {{ $item['icon'] }}"></i></span>
+                <a href="{{ route($item['route']) }}" class="name">{{ $item['label'] }}</a>
+                <span class="qty">{{ number_format($item['count']) }}</span>
+              </div>
+            @endforeach
+          </div>
+
+        </div>
+      </div>
 
     </div><!-- /content-area -->
   </div><!-- /container-fluid -->
 </div><!-- /main-section -->
 
 @include('admin.footer')
+
+<script>
+  (function () {
+    var el = document.getElementById('submissionsChart');
+    if (!el || typeof Chart === 'undefined') return;
+
+    var labels = @json($labels);
+    var series = @json($chart);
+
+    function dataset(label, data, color) {
+      return {
+        label: label,
+        data: data,
+        borderColor: color,
+        backgroundColor: color + '22',
+        borderWidth: 2,
+        tension: 0.35,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        fill: false
+      };
+    }
+
+    new Chart(el, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          dataset('Contact', series.contact, '#0069d9'),
+          dataset('Feedback', series.feedback, '#007a5e'),
+          dataset('Franchise', series.franchise, '#916a00')
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } },
+          y: { beginAtZero: true, ticks: { precision: 0 } }
+        }
+      }
+    });
+  })();
+</script>

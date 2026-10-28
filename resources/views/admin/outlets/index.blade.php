@@ -34,6 +34,7 @@
                                 <th style="width:60px">ID</th>
                                 <th>Outlet</th>
                                 <th style="width:240px">Phones</th>
+                                <th style="width:150px">Order Online</th>
                                 <th style="width:80px">Order</th>
                                 <th style="width:110px">Status</th>
                                 <th style="width:90px">Actions</th>
@@ -46,11 +47,26 @@
                                     <td><span class="id-chip">{{ $outlet->id }}</span></td>
 
                                     <td>
-                                        <div class="question-text">{{ $outlet->name }}</div>
-                                        <div class="target-text">{{ \Illuminate\Support\Str::limit($outlet->address, 70) }}</div>
+                                        <div style="display:flex;align-items:center;gap:12px">
+                                            @if($outlet->image)
+                                                <img src="{{ asset($outlet->image) }}" alt=""
+                                                    style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0">
+                                            @endif
+                                            <div>
+                                                <div class="question-text">
+                                                    {{ $outlet->name }}
+                                                    @if($outlet->is_flagship)
+                                                        <i class="fa fa-star" style="color:#c49a45" title="Flagship"></i>
+                                                    @endif
+                                                </div>
+                                                <div class="target-text">{{ \Illuminate\Support\Str::limit($outlet->address, 70) }}</div>
+                                            </div>
+                                        </div>
                                     </td>
 
                                     <td>{{ $outlet->phones ?: '—' }}</td>
+
+                                    <td>{{ $outlet->order_platforms ?: 'Call only' }}</td>
 
                                     <td><span class="id-chip">{{ $outlet->sort_order }}</span></td>
 
@@ -76,11 +92,11 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <div class="empty-state">
                                             <div class="empty-icon"><i class="fa fa-map-marker"></i></div>
                                             <strong style="font-size:14px;color:var(--text-primary)">No outlets found</strong>
-                                            <p>Add your outlets to show them on the contact page.</p>
+                                            <p>Add your outlets to show them on the website.</p>
                                             <a href="{{ route('admin.outlets.create') }}" class="btn-primary-dash">
                                                 <i class="fa fa-plus"></i> Add Outlet
                                             </a>
@@ -128,4 +144,4 @@ function deleteOutlet(id) {
         }
     });
 }
-</script>c
+</script>

@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('admin.outlets.store') }}" method="POST">
+            <form action="{{ route('admin.outlets.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @include('admin.outlets._form', ['outlet' => null])
             </form>
@@ -30,4 +30,4 @@
     </div>
 </div>
 
-@include('admin.footer')e
+@include('admin.footer')

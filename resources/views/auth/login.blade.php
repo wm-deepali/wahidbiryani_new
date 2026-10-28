@@ -4,22 +4,25 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-    /* ── Theme: taken from the website's home.css ── */
+    /* ── Theme: same palette as the website (style.css) ── */
     :root {
-        --brand: #457c10;
-        --brand-light: #8cc63f;
-        --brand-pale: #d4ec9a;
-        --brand-teal: #2f9e6e;
-        --brand-dark: #0e1a09;
-        --brand-dark-2: #16260d;
-        --brand-soft: #f4f8ee;
-        --text: #202223;
-        --muted: #6d7175;
-        --border: #e3e5e8;
-        --font: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --primary: #123F32;        /* Lucknowi Heritage Green */
+        --secondary: #1D5946;      /* Awadhi Deep Green */
+        --deep: #0c251e;
+        --mid: #154537;
+        --ivory: #F4EBD7;          /* Dastarkhwan Ivory */
+        --cream: #FBF7EC;          /* Dastarkhwan Cream */
+        --gold: #C49A45;           /* Antique Awadhi Gold */
+        --peach: #DDBB9A;
+        --red: #8B1E1E;            /* Lucknowi Burgundy */
+        --text: #292A24;
+        --muted: #6b6d63;
+        --border: rgba(196, 154, 69, .35);
+        --font-display: 'Cormorant Garamond', serif;
+        --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
     /* This page is only the card: hide the default Laravel navbar */
@@ -27,11 +30,11 @@
     main.py-4 { padding: 0 !important; }
 
     body {
-        font-family: var(--font);
-        background:
-            radial-gradient(circle at 12% 18%, rgba(140, 198, 63, .35), transparent 45%),
-            radial-gradient(circle at 88% 82%, rgba(47, 158, 110, .28), transparent 45%),
-            linear-gradient(160deg, var(--brand-dark) 0%, var(--brand-dark-2) 55%, var(--brand) 140%);
+        font-family: var(--font-body);
+        background-color: var(--deep);
+        background-image:
+            url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c49a45' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0L40 20L20 40zM20 5L35 20L20 35L5 20z'/%3E%3C/g%3E%3C/svg%3E"),
+            radial-gradient(circle at center, var(--mid) 0%, var(--deep) 100%);
         background-attachment: fixed;
     }
 
@@ -49,8 +52,9 @@
         display: flex;
         border-radius: 24px;
         overflow: hidden;
-        background: #fff;
-        box-shadow: 0 30px 70px rgba(5, 12, 3, .45);
+        background: var(--cream);
+        border: 1px solid var(--gold);
+        box-shadow: 0 30px 70px rgba(0, 0, 0, .5), 0 0 30px rgba(196, 154, 69, .15);
     }
 
     /* ── Left brand panel ── */
@@ -64,39 +68,40 @@
         justify-content: center;
         text-align: center;
         color: #fff;
-        background: linear-gradient(160deg, var(--brand-dark) 0%, var(--brand-dark-2) 45%, var(--brand) 130%);
+        background: radial-gradient(circle at center, var(--mid) 0%, var(--deep) 100%);
+        border-right: 1px solid var(--gold);
         overflow: hidden;
     }
 
-    .login-left::before,
+    /* gold jaali pattern */
+    .login-left::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c49a45' fill-opacity='0.07' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0L40 20L20 40zM20 5L35 20L20 35L5 20z'/%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    /* gold dashed trim at the top, like the site sections */
     .login-left::after {
         content: '';
         position: absolute;
-        border-radius: 50%;
-        filter: blur(40px);
-    }
-
-    .login-left::before {
-        width: 260px; height: 260px;
-        top: -90px; right: -90px;
-        background: rgba(140, 198, 63, .35);
-    }
-
-    .login-left::after {
-        width: 220px; height: 220px;
-        bottom: -80px; left: -80px;
-        background: rgba(47, 158, 110, .35);
+        top: 0; left: 0; right: 0;
+        height: 5px;
+        background: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 8px);
+        opacity: .6;
     }
 
     .login-left > * { position: relative; z-index: 1; }
 
     .logo-box {
-        background: #fff;
-        padding: 14px 18px;
-        border-radius: 16px;
+        background: rgba(255, 255, 255, .96);
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 1px solid rgba(196, 154, 69, .5);
         display: inline-block;
         margin-bottom: 22px;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, .25);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .3), 0 0 14px rgba(196, 154, 69, .25);
     }
 
     .logo-box img {
@@ -107,17 +112,27 @@
         object-fit: contain;
     }
 
+    .login-left .ornament {
+        display: block;
+        margin: 0 auto 12px;
+        opacity: .9;
+    }
+
     .login-left h2 {
-        font-size: 22px;
-        font-weight: 700;
+        font-family: var(--font-display);
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: .02em;
         margin: 0 0 8px;
-        color: #fff;
+        color: var(--ivory);
     }
 
     .login-left p {
-        font-size: 14px;
+        font-family: var(--font-display);
+        font-size: 17px;
+        font-style: italic;
         margin: 0;
-        color: rgba(255, 255, 255, .7);
+        color: var(--gold);
     }
 
     /* ── Right form panel ── */
@@ -127,28 +142,31 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: var(--cream);
     }
 
     .login-eyebrow {
         display: inline-block;
         align-self: flex-start;
         margin: 0 0 12px;
-        padding: 6px 14px;
-        border-radius: 999px;
+        padding: 6px 16px;
+        border-radius: 50px;
         font-size: 11px;
         font-weight: 700;
-        letter-spacing: .08em;
+        letter-spacing: .14em;
         text-transform: uppercase;
-        color: var(--brand);
-        background: var(--brand-soft);
-        border: 1px solid rgba(69, 124, 16, .18);
+        color: var(--primary);
+        background: rgba(196, 154, 69, .12);
+        border: 1px solid var(--gold);
     }
 
     .login-title {
-        font-size: 28px;
-        font-weight: 800;
-        color: var(--text);
+        font-family: var(--font-display);
+        font-size: 38px;
+        font-weight: 600;
+        color: var(--primary);
         margin: 0 0 6px;
+        line-height: 1.1;
     }
 
     .login-sub {
@@ -161,9 +179,11 @@
 
     .field label {
         display: block;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--text);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--primary);
         margin-bottom: 6px;
     }
 
@@ -171,24 +191,23 @@
         width: 100%;
         height: 48px;
         padding: 0 16px;
-        font-family: var(--font);
+        font-family: var(--font-body);
         font-size: 14px;
         color: var(--text);
-        background: #f9faf7;
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        transition: border-color .15s, box-shadow .15s, background .15s;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        transition: border-color .2s, box-shadow .2s;
     }
 
     .field .form-control:focus {
         outline: none;
-        background: #fff;
-        border-color: var(--brand);
-        box-shadow: 0 0 0 4px rgba(69, 124, 16, .14);
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px rgba(196, 154, 69, .2);
     }
 
     .field .form-control.is-invalid {
-        border-color: #d92d20;
+        border-color: var(--red);
         background-image: none;
     }
 
@@ -203,22 +222,22 @@
         border: none;
         background: transparent;
         padding: 6px 10px;
-        font-family: var(--font);
+        font-family: var(--font-body);
         font-size: 12px;
-        font-weight: 600;
-        color: var(--brand);
+        font-weight: 700;
+        color: var(--primary);
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 6px;
     }
 
-    .pw-toggle:hover { background: var(--brand-soft); }
+    .pw-toggle:hover { background: rgba(196, 154, 69, .15); }
 
     .field-error {
         display: block;
         margin-top: 6px;
         font-size: 12.5px;
-        font-weight: 500;
-        color: #d92d20;
+        font-weight: 600;
+        color: var(--red);
     }
 
     .login-options {
@@ -238,38 +257,51 @@
         cursor: pointer;
     }
 
-    .form-check-input { accent-color: var(--brand); cursor: pointer; }
+    .form-check-input { accent-color: var(--primary); cursor: pointer; }
 
     .forgot-link {
         font-size: 13px;
-        font-weight: 500;
-        color: var(--brand);
+        font-weight: 600;
+        color: var(--primary);
         text-decoration: none;
     }
 
-    .forgot-link:hover { text-decoration: underline; }
+    .forgot-link:hover { color: var(--gold); }
 
+    /* Burgundy button that fills green on hover, same as the site's .btn-burgundy-fill */
     .btn-login {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
         width: 100%;
         height: 50px;
-        border: none;
-        border-radius: 50px;
-        font-family: var(--font);
-        font-size: 15px;
-        font-weight: 600;
-        color: #fff;
-        background: linear-gradient(135deg, var(--brand) 0%, var(--brand-teal) 100%);
-        box-shadow: 0 12px 24px rgba(69, 124, 16, .32);
+        border: 1px solid var(--red);
+        border-radius: 6px;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: var(--red);
+        box-shadow: 0 8px 20px rgba(139, 30, 30, .3);
         cursor: pointer;
-        transition: transform .15s, box-shadow .15s;
+        transition: border-color .4s, box-shadow .4s;
     }
 
-    .btn-login:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 16px 30px rgba(69, 124, 16, .4);
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 0;
+        height: 100%;
+        background: var(--primary);
+        z-index: -1;
+        transition: width .5s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .btn-login:active { transform: translateY(0); }
+    .btn-login:hover { border-color: var(--primary); }
+    .btn-login:hover::before { width: 100%; }
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
@@ -278,10 +310,10 @@
         .login-left,
         .login-right { width: 100%; }
 
-        .login-left { padding: 32px 20px; }
+        .login-left { padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--gold); }
         .logo-box img { width: 110px; }
         .login-right { padding: 32px 24px; }
-        .login-title { font-size: 24px; }
+        .login-title { font-size: 32px; }
     }
 </style>
 
@@ -297,6 +329,12 @@
             <div class="logo-box">
                 <img src="{{ $general->admin_login_logo_url }}" alt="{{ $siteName }}">
             </div>
+
+            <svg class="ornament" width="140" height="24" viewBox="0 0 140 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 23V15C10 15 18 8 35 8C48 8 58 3 70 1C82 3 92 8 105 8C122 8 130 15 130 23"
+                    stroke="#C49A45" stroke-width="1.2" stroke-linecap="round" />
+                <circle cx="70" cy="11" r="2" fill="#C49A45" />
+            </svg>
 
             <h2>{{ $siteName }}</h2>
             @if (filled($general->tagline))

@@ -244,13 +244,11 @@
                                 <label for="contactMessage" class="contact-form-label">Message / Details of Inquiry</label>
                             </div>
 
-                            <div id="contactFormError" class="text-danger small mt-2" style="display:none"></div>
-
                             <button type="submit" id="contactSubmitBtn"
                                 class="btn btn-burgundy-fill w-100 py-3 mt-3 magnetic-btn">Send Message</button>
                         </form>
 
-                        <!-- Success Message Block (Shukriya) -->
+                        <!-- Fallback success block (used only if no thank-you redirect comes back) -->
                         <div id="formSuccessBlock" class="form-success-wrapper">
                             <div class="form-success-icon">
                                 <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -271,58 +269,7 @@
         </div>
     </section>
 
-    <script>
-    (function () {
-        var form = document.getElementById('heritageContactForm');
-        var success = document.getElementById('formSuccessBlock');
-        var errBox = document.getElementById('contactFormError');
-        var btn = document.getElementById('contactSubmitBtn');
-        if (!form) return;
-
-        // Capture phase + stopImmediatePropagation so the old static submit handler
-        // (which only showed the success block) doesn't also run.
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-
-            errBox.style.display = 'none';
-            btn.disabled = true;
-            var label = btn.textContent;
-            btn.textContent = 'Sending...';
-
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: new FormData(form)
-            })
-            .then(function (res) {
-                return res.json().then(function (data) { return { ok: res.ok, data: data }; });
-            })
-            .then(function (r) {
-                if (!r.ok) {
-                    var msg = (r.data && r.data.errors)
-                        ? Object.values(r.data.errors)[0][0]
-                        : ((r.data && r.data.message) || 'Something went wrong. Please try again.');
-                    throw new Error(msg);
-                }
-                form.reset();
-                form.style.display = 'none';
-                success.classList.add('active', 'show');
-                success.style.display = 'block';
-            })
-            .catch(function (err) {
-                errBox.textContent = err.message;
-                errBox.style.display = 'block';
-            })
-            .finally(function () {
-                btn.disabled = false;
-                btn.textContent = label;
-            });
-        }, true);
-    })();
-    </script>
+    {{-- Same shared submit script as the feedback and franchise pages: validates, posts, then goes to /thank-you --}}
+    @include('partials.ajax-form-script', ['formId' => 'heritageContactForm', 'successId' => 'formSuccessBlock'])
 
 @endsection

@@ -38,6 +38,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════
+   THEME — same palette as the website
+   green #123F32 · gold #C49A45 · ivory #F4EBD7
+════════════════════════════════════════════════════ */
+:root {
+    --adm-primary: #123F32;
+    --adm-primary-dark: #0c251e;
+    --adm-gold: #C49A45;
+    --adm-gold-dark: #a87e30;
+    --adm-ivory: #F4EBD7;
+}
+
+/* ════════════════════════════════════════════════════
    BASE — only safe overrides that won't break header.js
 ════════════════════════════════════════════════════ */
 body {
@@ -52,14 +64,14 @@ body {
    TOP HEADER
 ════════════════════════════════════════════════════ */
 .top-header-sec {
-    background: #1e2761 !important;
-    border-bottom: 1px solid rgba(255,255,255,.07) !important;
+    background: var(--adm-primary) !important;
+    border-bottom: 2px solid var(--adm-gold) !important;
     padding: 0 !important;
     margin-bottom: 0 !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 1030 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,.2) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,.25) !important;
 }
 .top-main-header {
     height: 56px;
@@ -95,10 +107,10 @@ body {
 }
 .admin-logo-sub {
     font-size: 9.5px;
-    color: rgba(255,255,255,.45);
+    color: var(--adm-gold);
     text-transform: uppercase;
     letter-spacing: .07em;
-    font-weight: 500;
+    font-weight: 600;
 }
 /* ── Spacer ── */
 .th-push { flex: 1 1 auto; }
@@ -110,7 +122,7 @@ body {
     border-radius: 8px;
     border: none;
     background: transparent;
-    color: rgba(255,255,255,.6);
+    color: rgba(255,255,255,.7);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -120,21 +132,21 @@ body {
     text-decoration: none;
     flex-shrink: 0;
 }
-.th-icon-btn:hover { background: rgba(255,255,255,.1); color: #fff; text-decoration: none; }
+.th-icon-btn:hover { background: rgba(196,154,69,.18); color: var(--adm-gold); text-decoration: none; }
 .th-icon-btn .th-dot {
     position: absolute;
     top: 3px; right: 1px;
     min-width: 17px; height: 17px;
     padding: 0 4px;
     border-radius: 9px;
-    background: #ef4444;
+    background: #8B1E1E;
     color: #fff;
     font-size: 9px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #1e2761;
+    border: 2px solid var(--adm-primary);
     box-sizing: content-box;
 }
 /* ── User button ── */
@@ -142,8 +154,8 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(196,154,69,.4);
     border-radius: 9px;
     padding: 5px 11px 5px 5px;
     cursor: pointer;
@@ -152,22 +164,22 @@ body {
     text-decoration: none;
     flex-shrink: 0;
 }
-.th-user-wrap:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.22); color: #fff; text-decoration: none; }
+.th-user-wrap:hover { background: rgba(196,154,69,.16); border-color: var(--adm-gold); color: #fff; text-decoration: none; }
 .th-avatar {
     width: 28px; height: 28px;
     border-radius: 7px;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background: linear-gradient(135deg, var(--adm-gold) 0%, var(--adm-gold-dark) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
     font-weight: 700;
-    color: #fff;
+    color: var(--adm-primary);
     flex-shrink: 0;
     letter-spacing: -.2px;
 }
 .th-uname  { font-size: 12.5px; font-weight: 650; color: #fff; line-height: 1.2; }
-.th-caret  { font-size: 9px;    color: rgba(255,255,255,.35); margin-left: 2px; }
+.th-caret  { font-size: 9px;    color: rgba(196,154,69,.8); margin-left: 2px; }
 /* ── Remove Bootstrap default dropdown arrow on toggle btn ── */
 .btn-group > .th-user-wrap::after { display: none; }
 .btn.bg-transparent { padding: 0 !important; border: none !important; background: transparent !important; box-shadow: none !important; }
@@ -175,9 +187,9 @@ body {
 /* ── Dropdown menu ── */
 .header-dropdown.dropdown-menu {
     min-width: 175px !important;
-    border: 1px solid #e3e5e8 !important;
+    border: 1px solid rgba(196,154,69,.45) !important;
     border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,.13) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.16) !important;
     padding: 6px !important;
     margin-top: 6px !important;
     background: #fff !important;
@@ -193,13 +205,14 @@ body {
     color: #202223 !important;
     transition: background .12s !important;
 }
-.header-dropdown .dropdown-item i { color: #8c9196 !important; font-size: 13px !important; width: 15px !important; text-align: center !important; }
-.header-dropdown .dropdown-item:hover { background: #f1f2f4 !important; color: #303d89 !important; }
-.header-dropdown .dropdown-item:hover i { color: #303d89 !important; }
+.header-dropdown .dropdown-item i { color: var(--adm-gold) !important; font-size: 13px !important; width: 15px !important; text-align: center !important; }
+.header-dropdown .dropdown-item:hover { background: #FBF7EC !important; color: var(--adm-primary) !important; }
+.header-dropdown .dropdown-item:hover i { color: var(--adm-primary) !important; }
 .header-dropdown .dropdown-divider { margin: 4px 0 !important; border-color: #e3e5e8 !important; }
-.header-dropdown .dd-danger        { color: #c0392b !important; }
-.header-dropdown .dd-danger i      { color: #c0392b !important; }
-.header-dropdown .dd-danger:hover  { background: #fce8e8 !important; color: #c0392b !important; }
+.header-dropdown .dd-danger        { color: #8B1E1E !important; }
+.header-dropdown .dd-danger i      { color: #8B1E1E !important; }
+.header-dropdown .dd-danger:hover  { background: #fbeaea !important; color: #8B1E1E !important; }
+.header-dropdown .dd-danger:hover i { color: #8B1E1E !important; }
 </style>
 </head>
 <body>
@@ -207,11 +220,9 @@ body {
     <div class="container-fluid p-0">
         <div class="top-main-header">
 
-            <!-- Logo -->
+            <!-- Logo (falls back to the login logo, then the default logo) -->
             <a href="{{ route('admin.dashboard') }}" class="admin-logo">
-                @if (filled($general->admin_dashboard_logo))
-                    <img src="{{ asset('storage/' . ltrim($general->admin_dashboard_logo, '/')) }}" alt="{{ $siteName }}">
-                @endif
+                <img src="{{ $general->admin_dashboard_logo_url }}" alt="{{ $siteName }}">
                 <div class="admin-logo-text">
                     <span class="admin-logo-brand">{{ $siteName }}</span>
                     <span class="admin-logo-sub">Admin Panel</span>

@@ -22,7 +22,7 @@
       <div class="hero-ctas">
         <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#orderOnlineModal"
           class="btn btn-peach-fill magnetic-btn">Order Food Online</a>
-        <a href="{{ route('about-us') }}" class="btn btn-gold-outline magnetic-btn">Explore Our Legacy</a>
+        <a href="#" class="btn btn-gold-outline magnetic-btn">Explore Our Legacy</a>
       </div>
 
       <!-- Gold delicate ornament line drawing -->
@@ -75,7 +75,7 @@
               style="font-size: 0.75rem;">— The Wahid Biryani Family</span>
           </div>
 
-          <a href="{{ route('about-us') }}" class="btn btn-gold-outline magnetic-btn mt-3">Read Our Full Story</a>
+          <a href="#" class="btn btn-gold-outline magnetic-btn mt-3">Read Our Full Story</a>
         </div>
 
         <!-- Highlights visual layout -->

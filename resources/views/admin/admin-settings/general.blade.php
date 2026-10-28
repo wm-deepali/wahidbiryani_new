@@ -8,6 +8,7 @@
             <span class="settings-sidenav-label">Sections</span>
             <a href="#gs-site" class="active"><i class="fa-solid fa-globe"></i> Site Identity</a>
             <a href="#gs-contact"><i class="fa-solid fa-phone"></i> Contact Info</a>
+            <a href="#gs-header"><i class="fa-solid fa-bullhorn"></i> Header</a>
             <a href="#gs-footer">
                 <i class="fa-solid fa-share-nodes"></i>
                 Footer & Social
@@ -22,9 +23,8 @@
             <!-- Site Identity -->
             <div class="settings-section" id="gs-site">
                 <div class="settings-section-title"><i class="fa-solid fa-globe"></i> Site Identity</div>
-                <p class="settings-section-desc">Basic information about your store shown to customers and used across
-                    the
-                    admin panel.</p>
+                <p class="settings-section-desc">Basic information about your website shown to visitors and used across
+                    the admin panel.</p>
 
                 <style>
                     .logo-preview-box {
@@ -63,17 +63,17 @@
 
                 <div class="form-grid">
                     <div class="field-group col-full">
-                        <label class="field-label">Site / Store Name <span class="req">*</span></label>
+                        <label class="field-label">Site Name <span class="req">*</span></label>
                         <input type="text" name="site_name" class="field-input"
-                            value="{{ old('site_name', $general?->site_name) }}" placeholder="Your store name">
+                            value="{{ old('site_name', $general?->site_name) }}" placeholder="Your site name">
                     </div>
 
                     <div class="field-group col-full">
                         <label class="field-label">Tagline</label>
                         <input type="text" name="tagline" class="field-input"
                             value="{{ old('tagline', $general?->tagline) }}"
-                            placeholder="e.g. Authentic Lucknowi Chikankari">
-                        <span class="field-hint">Used alongside the website header logo.</span>
+                            placeholder="e.g. Har Mehfil Ki Shaan">
+                        <span class="field-hint">Shown in the header logo tooltip and in the quote box in the footer.</span>
                     </div>
 
                     <!-- Website Header Logo -->
@@ -212,7 +212,7 @@
                         <label class="field-label">Admin Email</label>
                         <input type="email" name="admin_email" class="field-input"
                             value="{{ old('admin_email', $general?->admin_email) }}">
-                        <span class="field-hint">Used for system notifications and order alerts.</span>
+                        <span class="field-hint">Used for system notifications and enquiry alerts.</span>
                     </div>
                 </div>
             </div>
@@ -222,30 +222,33 @@
             <!-- Contact Info -->
             <div class="settings-section" id="gs-contact">
                 <div class="settings-section-title"><i class="fa-solid fa-phone"></i> Contact Info</div>
-                <p class="settings-section-desc">Displayed on invoices, emails, and the storefront footer.</p>
+                <p class="settings-section-desc">Displayed on the contact page, the footer and the top announcement bar.</p>
 
                 <div class="form-grid">
                     <div class="field-group">
                         <label class="field-label">Phone Number</label>
                         <input type="text" name="phone" class="field-input" value="{{ old('phone', $general?->phone) }}"
                             placeholder="+91 98765 43210">
+                        <span class="field-hint">Footer "Ordering Inquiries" and contact page.</span>
                     </div>
                     <div class="field-group">
                         <label class="field-label">WhatsApp Number</label>
                         <input type="text" name="whatsapp" class="field-input"
                             value="{{ old('whatsapp', $general?->whatsapp) }}" placeholder="+91 98765 43210">
+                        <span class="field-hint">Announcement bar icon, footer "Franchise & Catering" and contact page.</span>
                     </div>
                     <div class="field-group">
                         <label class="field-label">Support Email</label>
                         <input type="email" name="support_email" class="field-input"
                             value="{{ old('support_email', $general?->support_email) }}">
-
+                        <span class="field-hint">Used in the footer and as the fallback for outlets without an email.</span>
                     </div>
                     <div class="field-group">
                         <label class="field-label">Working Hours</label>
                         <input type="text" name="business_hours" class="field-input"
                             value="{{ old('business_hours', $general->business_hours ?? '') }}"
-                            placeholder="Mon – Fri, 10:00 AM – 7:00 PM">
+                            placeholder="12:30 PM to 10:30 PM (Daily)">
+                        <span class="field-hint">Shown in the footer.</span>
                     </div>
                     <div class="field-group col-full">
                         <label class="field-label">Business Address</label>
@@ -255,9 +258,36 @@
                 </div>
             </div>
 
+            <hr class="section-divider">
+
+            <!-- Header -->
+            <div class="settings-section" id="gs-header">
+                <div class="settings-section-title"><i class="fa-solid fa-bullhorn"></i> Header</div>
+                <p class="settings-section-desc">Text shown in the top announcement bar and on the page loading screen.
+                    Social icons in the announcement bar come from the Footer & Social section.</p>
+
+                <div class="form-grid">
+                    <div class="field-group col-full">
+                        <label class="field-label">Announcement Bar Text</label>
+                        <input type="text" name="announcement_text" class="field-input"
+                            value="{{ old('announcement_text', $general?->announcement_text) }}"
+                            placeholder="Since 1955 | The Original Taste of Lucknow | Serving Generations with the Same Aroma & Tradition">
+                        <span class="field-hint">Shown on the left side of the top bar.</span>
+                    </div>
+
+                    <div class="field-group col-full">
+                        <label class="field-label">Preloader Subtitle</label>
+                        <input type="text" name="preloader_subtitle" class="field-input"
+                            value="{{ old('preloader_subtitle', $general?->preloader_subtitle) }}"
+                            placeholder="Since 1955">
+                        <span class="field-hint">Small text under the logo on the loading screen. Leave empty to hide it.</span>
+                    </div>
+                </div>
+            </div>
 
             <hr class="section-divider">
 
+            <!-- Footer & Social -->
             <div class="settings-section" id="gs-footer">
                 <div class="settings-section-title">
                     <i class="fa-solid fa-share-nodes"></i>
@@ -265,10 +295,18 @@
                 </div>
 
                 <p class="settings-section-desc">
-                    Footer description and social media links displayed across the website.
+                    Footer text and social media links displayed across the website.
                 </p>
 
                 <div class="form-grid">
+
+                    <div class="field-group col-full">
+                        <label class="field-label">Footer Urdu Text</label>
+                        <input type="text" name="footer_urdu_text" class="field-input" dir="rtl"
+                            value="{{ old('footer_urdu_text', $general?->footer_urdu_text) }}"
+                            placeholder="روایت • نسلاً بعد نسل">
+                        <span class="field-hint">Urdu line under the footer logo. Leave empty to hide it.</span>
+                    </div>
 
                     <div class="field-group col-full">
                         <label class="field-label">Footer Description</label>
@@ -277,6 +315,14 @@
                         <span class="field-hint">
                             Displayed in the website footer.
                         </span>
+                    </div>
+
+                    <div class="field-group col-full">
+                        <label class="field-label">Footer Copyright</label>
+                        <input type="text" name="footer_copyright" class="field-input"
+                            value="{{ old('footer_copyright', $general?->footer_copyright) }}"
+                            placeholder="© 2026 Your Company Pvt. Ltd. All rights reserved.">
+                        <span class="field-hint">Shown at the very bottom of the footer.</span>
                     </div>
 
                     <div class="field-group">
@@ -337,7 +383,7 @@
             <div class="settings-section" id="gs-regional">
                 <div class="settings-section-title"><i class="fa-solid fa-map-pin"></i> Regional Settings</div>
                 <p class="settings-section-desc">Currency, timezone and date format used across the panel and
-                    storefront.
+                    website.
                 </p>
 
                 <div class="form-grid">
@@ -370,7 +416,7 @@
                 <div class="toggle-row">
                     <div>
                         <div class="toggle-info-label">Maintenance Mode</div>
-                        <div class="toggle-info-sub">Take the storefront offline for visitors while you work.</div>
+                        <div class="toggle-info-sub">Take the website offline for visitors while you work.</div>
                     </div>
                     <label class="toggle-switch"><input type="checkbox" name="maintenance_mode" {{ old('maintenance_mode', $general?->maintenance_mode) ? 'checked' : '' }}><span
                             class="toggle-track"></span></label>
@@ -381,7 +427,7 @@
                         <div class="toggle-info-sub">Auto-logout after inactivity (minutes).</div>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px">
-                        <input type="number" class="field-input" name="admin_session_timeout"
+                        <input type="number" min="1" max="1440" class="field-input" name="admin_session_timeout"
                             value="{{ old('admin_session_timeout', $general?->admin_session_timeout ?? 60) }}"
                             style="width:80px;height:32px;font-size:13px">
                         <span style="font-size:12.5px;color:var(--text-hint)">min</span>
@@ -394,7 +440,7 @@
     </div><!-- /settings-layout -->
 
     <div class="action-bar">
-        <button class="btn-secondary-dash">Discard Changes</button>
+        <button type="button" class="btn-secondary-dash" onclick="window.location.reload()">Discard Changes</button>
         <button type="submit" class="btn-primary-dash">
             <i class="fa fa-save"></i>
             Save General Settings

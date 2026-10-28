@@ -1,6 +1,9 @@
 {{--
-    Shared AJAX submit for the public forms.
+    Shared AJAX submit for the public forms (contact, feedback, franchise).
     Usage: @include('partials.ajax-form-script', ['formId' => 'feedbackForm', 'successId' => 'feedbackSuccess'])
+
+    On success the server returns { message, redirect }; the visitor is sent to the
+    thank-you page. If no redirect URL comes back, the inline success block is shown instead.
 --}}
 <script>
 (function () {
@@ -20,6 +23,7 @@
 
         var btn = form.querySelector('button[type="submit"]');
         var label = btn.textContent;
+        var redirecting = false;
         errBox.style.display = 'none';
         btn.disabled = true;
         btn.textContent = 'Sending...';
@@ -42,8 +46,18 @@
                     : ((r.data && r.data.message) || 'Something went wrong. Please try again.');
                 throw new Error(msg);
             }
+
+            // Go to the thank-you page (button stays disabled to block double submits)
+            if (r.data && r.data.redirect) {
+                redirecting = true;
+                window.location.href = r.data.redirect;
+                return;
+            }
+
+            // Fallback: inline success message
             form.reset();
             form.style.display = 'none';
+            success.classList.add('active', 'show');
             success.style.display = 'block';
         })
         .catch(function (err) {
@@ -51,6 +65,7 @@
             errBox.style.display = 'block';
         })
         .finally(function () {
+            if (redirecting) return;
             btn.disabled = false;
             btn.textContent = label;
         });

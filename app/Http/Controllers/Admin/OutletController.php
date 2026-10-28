@@ -40,7 +40,14 @@ class OutletController extends Controller
     public function update(Request $request, $id)
     {
         $outlet = Outlet::findOrFail($id);
-        $outlet->update($this->validated($request));
+        $data   = $this->validated($request);
+
+        // New image uploaded -> remove the old uploaded one
+        if (isset($data['image']) && $outlet->image) {
+            $this->deleteUploadedImage($outlet->image);
+        }
+
+        $outlet->update($data);
 
         return redirect()->route('admin.outlets.index')
             ->with('success', 'Outlet updated successfully.');
@@ -48,7 +55,13 @@ class OutletController extends Controller
 
     public function destroy($id)
     {
-        Outlet::findOrFail($id)->delete();
+        $outlet = Outlet::findOrFail($id);
+
+        if ($outlet->image) {
+            $this->deleteUploadedImage($outlet->image);
+        }
+
+        $outlet->delete();
 
         return response()->json(['message' => 'Outlet deleted successfully.']);
     }
@@ -56,21 +69,82 @@ class OutletController extends Controller
     private function validated(Request $request): array
     {
         $data = $request->validate([
-            'name'       => 'required|string|max:255',
-            'address'    => 'required|string',
-            'email'      => 'nullable|email|max:255',
-            'phones'     => 'nullable|string|max:255',
-            'whatsapp'   => 'nullable|string|max:50',
-            'map_url'    => 'nullable|string',
-            'sort_order' => 'nullable|integer|min:0',
-            'status'     => 'nullable|boolean',
+            'name'                  => 'required|string|max:255',
+            'address'               => 'required|string',
+            'email'                 => 'nullable|email|max:255',
+            'phones'                => 'nullable|string|max:255',
+            'whatsapp'              => 'nullable|string|max:50',
+            'map_url'               => 'nullable|string',
+            'timings'               => 'nullable|string|max:100',
+
+            'swiggy_url'            => 'nullable|url|max:500',
+            'zomato_url'            => 'nullable|url|max:500',
+
+            'title'                 => 'nullable|string|max:255',
+            'subtitle'              => 'nullable|string|max:255',
+            'urdu_name'             => 'nullable|string|max:255',
+            'description'           => 'nullable|string',
+            'badge_text'            => 'nullable|string|max:255',
+            'badge_icon'            => 'nullable|string|max:100',
+            'is_flagship'           => 'nullable|boolean',
+            'amenities'             => 'nullable|array',
+            'amenities.*.icon'      => 'nullable|string|max:100',
+            'amenities.*.label'     => 'nullable|string|max:100',
+            'prep_time'             => 'nullable|string|max:100',
+            'image'                 => 'nullable|image|max:3072',
+            'tag_text'              => 'nullable|string|max:255',
+            'tag_icon'              => 'nullable|string|max:100',
+
+            'sort_order'            => 'nullable|integer|min:0',
+            'status'                => 'nullable|boolean',
         ]);
 
-        $data['map_url']    = $this->normalizeMapUrl($data['map_url'] ?? null);
-        $data['sort_order'] = $data['sort_order'] ?? 0;
-        $data['status']     = $request->boolean('status');
+        $data['map_url']     = $this->normalizeMapUrl($data['map_url'] ?? null);
+        $data['sort_order']  = $data['sort_order'] ?? 0;
+        $data['status']      = $request->boolean('status');
+        $data['is_flagship'] = $request->boolean('is_flagship');
+
+        // Columns that are NOT NULL with a default: empty input must fall back to the default
+        $data['timings']    = $data['timings']    ?? '12:30 PM – 10:30 PM';
+        $data['prep_time']  = $data['prep_time']  ?? '15 – 20 Minutes';
+        $data['badge_icon'] = $data['badge_icon'] ?? 'fa-solid fa-hotel';
+        $data['tag_icon']   = $data['tag_icon']   ?? 'fa-solid fa-star';
+
+        // Amenities: drop empty rows, reindex
+        $data['amenities'] = collect($data['amenities'] ?? [])
+            ->filter(fn ($a) => filled($a['label'] ?? null))
+            ->map(fn ($a) => [
+                'icon'  => $a['icon'] ?: 'fa-solid fa-check',
+                'label' => $a['label'],
+            ])
+            ->values()
+            ->all() ?: null;
+
+        // Image: only touch the column when a new file is uploaded
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $name = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
+                . '-' . time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('uploads/outlets'), $name);
+            $data['image'] = 'uploads/outlets/' . $name;
+        } else {
+            unset($data['image']);
+        }
 
         return $data;
+    }
+
+    /** Only deletes files we uploaded (not the static assets/img/* files). */
+    private function deleteUploadedImage(string $path): void
+    {
+        if (Str::startsWith($path, 'uploads/outlets/')) {
+            $full = public_path($path);
+
+            if (is_file($full)) {
+                @unlink($full);
+            }
+        }
     }
 
     /**

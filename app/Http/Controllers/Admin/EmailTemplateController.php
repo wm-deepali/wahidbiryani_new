@@ -10,25 +10,67 @@ use Illuminate\Http\Request;
 
 class EmailTemplateController extends Controller
 {
+    public function index()
+    {
+        return view('admin.admin-settings.templates', self::getData());
+    }
+
     /**
-     * The blade is shared with SMS templates — this just
-     * supplies the $emailTemplates and $emailMeta variables.
-     * The view is loaded by whatever controller already renders
-     * the message-templates page; call getData() from there.
+     * Supplies $emailTemplates, $emailMeta, $smtpSettings and $emailSamples
+     * to the shared message-templates blade.
      */
     public static function getData(): array
     {
-        $meta = EmailTemplate::eventMeta();
-
-        // Keyed by event_key for easy blade lookup
         $templates = EmailTemplate::whereIn('event_key', EmailTemplate::$eventKeys)
             ->get()
             ->keyBy('event_key');
 
         return [
-            'emailMeta' => $meta,
+            'emailMeta' => EmailTemplate::eventMeta(),
             'emailTemplates' => $templates,
             'smtpSettings' => SmtpSetting::getInstance(),
+            'emailSamples' => self::sampleVars(),
+        ];
+    }
+
+    /**
+     * Sample values for every template variable.
+     * Used by the live preview (blade) and by the test email.
+     *
+     * Keys must match the placeholders in EmailTemplate::eventMeta().
+     */
+    public static function sampleVars(string $email = 'priya.verma@example.com'): array
+    {
+        // Same $general object the front-end layout uses (admin → General Settings)
+        $general = view()->shared('general');
+
+        $siteUrl = rtrim(url('/'), '/');
+        $brandName = $general?->site_name ?: config('app.name', 'Wahid Biryani');
+        $logo = $general?->header_logo_url ?? asset('assets/img/logo.png');
+
+        return [
+            // Visitor details (form fields)
+            '{name}' => 'Priya Verma',
+            '{email}' => $email,
+            '{phone}' => '+91 98765 43210',
+            '{message}' => 'We loved the biryani at your Aminabad outlet. Do you take bulk orders for weddings?',
+
+            // Contact enquiry
+            '{request_type}' => 'Catering / Bulk Order',
+
+            // Feedback
+            '{outlet}' => 'Aminabad Outlet',
+
+            // Franchise enquiry
+            '{city}' => 'Kanpur',
+            '{budget}' => '₹25 - 50 Lakhs',
+
+            // Common
+            '{brand_name}' => $brandName,
+            '{site_url}' => $siteUrl,
+            '{logo_url}' => $logo,
+            '{submitted_at}' => now()->format('d M Y, g:i A'),
+            '{ip_address}' => '103.21.58.14',
         ];
     }
 
@@ -87,29 +129,7 @@ class EmailTemplateController extends Controller
         $eventKey = $request->input('event_key');
         $email = $request->input('email');
 
-        // Sample variables — matches EmailTemplate::eventMeta() vars exactly
-        $samples = [
-            // Customer (business / service enquiry)
-            '{customer_name}' => 'Rahul Sharma',
-            '{customer_email}' => $email,
-            '{customer_mobile}' => '+91 98765 43210',
-            '{service}' => 'Website Development',
-            '{message}' => 'I would like a quote for a 10 page business website.',
-
-            // Candidate (career form)
-            '{candidate_name}' => 'Priya Verma',
-            '{candidate_email}' => $email,
-            '{candidate_mobile}' => '+91 91234 56789',
-            '{position}' => 'Laravel Developer',
-            '{apply_type}' => 'Job',
-
-            // Global
-            '{brand_name}' => config('app.name', 'Web Mingo'),
-            '{site_url}' => url('/'),
-            '{logo_url}' => asset('assets/images/logo.png'),
-        ];
-
-        $result = EmailDispatcher::sendTest($eventKey, $email, $samples, 'Test Recipient');
+        $result = EmailDispatcher::sendTest($eventKey, $email, self::sampleVars($email), 'Test Recipient');
 
         return response()->json([
             'success' => $result['success'],

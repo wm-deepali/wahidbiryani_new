@@ -5,11 +5,11 @@
 @section('content')
 
     <!-- Page Header -->
-    <section class="section-padding text-center heritage-page-header position-relative overflow-hidden bg-ivory" style="padding-top: 180px;>
+    <section class="section-padding text-center heritage-page-header position-relative overflow-hidden bg-ivory"
+        style="padding-top: 180px;">
 
         <!-- Subtle Pattern -->
-        <div class=" sig-jaali-overlay" style="opacity: 0.05; z-index: 1;">
-        </div>
+        <div class="sig-jaali-overlay" style="opacity: 0.05; z-index: 1;"></div>
 
         <div class="container position-relative" style="z-index: 5;">
             <div class="heritage-title-box">
@@ -45,83 +45,31 @@
         </div>
     </section>
 
-    <!-- Image Gallery (Masonry style items) -->
+    <!-- Image Gallery -->
     <section class="section-padding bg-ivory" style="padding-top: 40px; padding-bottom: 80px;">
         <div class="container">
-            <div class="gallery-grid">
 
-                <!-- Images -->
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery1.jpeg" alt="Smiling moment at the Wahid Biryani outlet"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">Smiles at the Outlet</h3>
-                        <span class="gallery-category">Moments</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
+            @if($images->count())
+                <div class="gallery-grid">
+                    @foreach($images as $image)
+                        <div class="gallery-item reveal-scale"
+                            style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
+                            <img loading="lazy" src="{{ $image->image_url }}" alt="{{ $image->title }}"
+                                style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                            <div class="gallery-overlay">
+                                <h3 class="gallery-title">{{ $image->title }}</h3>
+                                @if($image->subtitle)
+                                    <span class="gallery-category">{{ $image->subtitle }}</span>
+                                @endif
+                                <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+            @else
+                <p class="text-center text-dark opacity-75">Our gallery will be available soon.</p>
+            @endif
 
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery2.jpeg"
-                        alt="Welcome scroll for Lucknow's oldest taste of Mughlai food"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">Lucknow's Oldest Taste of Mughlai Food</h3>
-                        <span class="gallery-category">Heritage</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
-                </div>
-
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery3.jpeg" alt="The Wahid Biryani family and team together"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">The Wahid Biryani Family</h3>
-                        <span class="gallery-category">Our People</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
-                </div>
-
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery4.jpeg" alt="Guest welcomed with a bouquet at the outlet"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">A Warm Welcome for Our Guests</h3>
-                        <span class="gallery-category">Hospitality</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
-                </div>
-
-
-
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery7.jpeg" alt="Guests posing at the Wahid Biryani outlet"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">Guests Who Love Wahid</h3>
-                        <span class="gallery-category">Guests</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
-                </div>
-
-                <div class="gallery-item reveal-scale"
-                    style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 4/5;">
-                    <img loading="lazy" src="assets/img/gallery9.jpeg"
-                        alt="Group celebration in front of the Wahid Biryani outlet"
-                        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
-                    <div class="gallery-overlay">
-                        <h3 class="gallery-title">Celebrations at the Outlet</h3>
-                        <span class="gallery-category">Celebrations</span>
-                        <div class="gallery-view-icon"><i class="fa-solid fa-eye"></i></div>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </section>
 
@@ -157,7 +105,7 @@
                             <h3 class="royal-lightbox-title" id="lightboxTitle">Image Title</h3>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="royal-lightbox-count" id="lightboxCount">1 / 9</span>
+                            <span class="royal-lightbox-count" id="lightboxCount">1 / {{ $images->count() }}</span>
                             <a href="{{ route('menu') }}" class="btn btn-burgundy-fill btn-sm magnetic-btn py-2 px-3">Order
                                 Special</a>
                         </div>
@@ -166,7 +114,6 @@
             </div>
         </div>
     </div>
-
 
 @endsection
 

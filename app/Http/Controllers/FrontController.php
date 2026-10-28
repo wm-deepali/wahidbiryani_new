@@ -5,11 +5,14 @@ use App\Models\Blog;
 use App\Models\Faq;
 use App\Models\Feedback;
 use App\Models\FranchiseEnquiry;
+use App\Models\GalleryImage;
+use App\Models\GalleryVideo;
 use App\Models\Outlet;
 use App\Models\Setting;
 use App\Models\MenuCategory;
 use Illuminate\Http\Request;
 use App\Models\ContactEnquiry;
+use App\Services\Email\EmailDispatcher;
 
 class FrontController extends Controller
 {
@@ -48,6 +51,13 @@ class FrontController extends Controller
         return view('front-pages.contact', compact('outlets', 'settings'));
     }
 
+    public function ourOutlets()
+    {
+        $outlets = Outlet::active()->ordered()->get();
+
+        return view('front-pages.our-outlets', compact('outlets'));
+    }
+
     public function menu()
     {
         $categories = MenuCategory::active()->ordered()
@@ -60,6 +70,73 @@ class FrontController extends Controller
 
         return view('front-pages.menu', compact('categories', 'currency'));
     }
+
+    public function imageGallery()
+    {
+        $images = GalleryImage::active()->ordered()->get();
+
+        return view('front-pages.image-gallery', compact('images'));
+    }
+
+    public function videoGallery()
+    {
+        // Uploaded videos, plus link videos whose link can be turned into an embed
+        $videos = GalleryVideo::active()->ordered()->get()
+            ->filter(fn($video) => $video->isUpload() ? $video->video_file_url : $video->embed_url)
+            ->values();
+
+        return view('front-pages.video-gallery', compact('videos'));
+    }
+
+    public function feedback()
+    {
+        $outlets = Outlet::active()->ordered()->get();
+
+        return view('front-pages.feedback', compact('outlets'));
+    }
+
+    public function franchise()
+    {
+        return view('front-pages.franchise');
+    }
+
+    // ── Thank-you page ──────────────────────────────────────────────────────
+
+    /**
+     * Only reachable right after a form submit (the type is flashed to the
+     * session). Opening /thank-you directly sends the visitor to the home page.
+     */
+    public function thankYou()
+    {
+        $type = session('thank_you');
+
+        if (!in_array($type, ['contact', 'feedback', 'franchise'], true)) {
+            return redirect()->route('home');
+        }
+
+        return view('front-pages.thank-you', compact('type'));
+    }
+
+    /**
+     * Success response for the three forms.
+     * AJAX / fetch submits get JSON with a "redirect" URL; a normal form post
+     * is redirected straight to the thank-you page.
+     */
+    private function thankYouResponse(Request $request, string $type, string $message)
+    {
+        session()->flash('thank_you', $type);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $message,
+                'redirect' => route('thank-you'),
+            ]);
+        }
+
+        return redirect()->route('thank-you');
+    }
+
+    // ── Form submissions ────────────────────────────────────────────────────
 
     public function storeContact(Request $request)
     {
@@ -80,14 +157,16 @@ class FrontController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        return response()->json(['message' => 'Thank you for writing to us.']);
-    }
+        // Admin notification (needs the SMTP switch AND the template to be on)
+        EmailDispatcher::sendToAdmin('contact-enquiry', [
+            '{name}' => $data['name'],
+            '{email}' => $data['email'],
+            '{phone}' => $data['phone'],
+            '{request_type}' => $data['request'],
+            '{message}' => $data['message'],
+        ]);
 
-    public function feedback()
-    {
-        $outlets = Outlet::active()->ordered()->get();
-
-        return view('front-pages.feedback', compact('outlets'));
+        return $this->thankYouResponse($request, 'contact', 'Thank you for writing to us.');
     }
 
     public function storeFeedback(Request $request)
@@ -109,12 +188,15 @@ class FrontController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        return response()->json(['message' => 'Thank you for your feedback.']);
-    }
+        EmailDispatcher::sendToAdmin('feedback', [
+            '{name}' => $data['name'],
+            '{email}' => $data['email'],
+            '{phone}' => $data['phone'],
+            '{outlet}' => $data['branch'],
+            '{message}' => $data['message'],
+        ]);
 
-    public function franchise()
-    {
-        return view('front-pages.franchise');
+        return $this->thankYouResponse($request, 'feedback', 'Thank you for your feedback.');
     }
 
     public function storeFranchiseEnquiry(Request $request)
@@ -130,7 +212,16 @@ class FrontController extends Controller
 
         FranchiseEnquiry::create($data + ['ip_address' => $request->ip()]);
 
-        return response()->json(['message' => 'Thank you for your interest.']);
-    }
-}
+        EmailDispatcher::sendToAdmin('franchise-enquiry', [
+            '{name}' => $data['name'],
+            '{email}' => $data['email'],
+            '{phone}' => $data['phone'],
+            '{city}' => $data['city'],
+            '{budget}' => $data['budget'],
+            '{message}' => $data['message'],
+        ]);
 
+        return $this->thankYouResponse($request, 'franchise', 'Thank you for your interest.');
+    }
+
+}

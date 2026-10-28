@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             BlogSeeder::class,
             MenuSeeder::class,
             OutletSeeder::class,
+            GallerySeeder::class,
+            SettingSeeder::class,
             SeoPageSeeder::class,
         ]);
 

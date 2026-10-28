@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     protected $fillable = [
+        // Site Identity
         'site_name',
         'tagline',
         'header_logo',
@@ -14,24 +15,39 @@ class Setting extends Model
         'admin_login_logo',
         'admin_dashboard_logo',
         'favicon',
+
+        // Contact
         'admin_email',
         'support_email',
         'phone',
         'whatsapp',
         'business_address',
         'business_hours',
+
+        // Header
+        'announcement_text',
+        'preloader_subtitle',
+
+        // Footer
         'footer_description',
+        'footer_urdu_text',
         'footer_copyright',
         'google_map_url',
+
+        // Social Links
         'facebook',
         'instagram',
         'twitter',
         'linkedin',
         'youtube',
         'pinterest',
+
+        // Regional
         'currency',
         'currency_symbol',
         'timezone',
+
+        // Features
         'maintenance_mode',
         'admin_session_timeout',
     ];
@@ -53,7 +69,7 @@ class Setting extends Model
 
     public function getHeaderLogoUrlAttribute(): string
     {
-        return $this->storageUrl($this->header_logo, 'assets/images/logo.png');
+        return $this->storageUrl($this->header_logo, 'assets/img/logo.png');
     }
 
     // Footer logo, else header logo, else the default
@@ -65,7 +81,7 @@ class Setting extends Model
 
     public function getAdminLoginLogoUrlAttribute(): string
     {
-        return $this->storageUrl($this->admin_login_logo, 'assets/images/logo.png');
+        return $this->storageUrl($this->admin_login_logo, 'assets/img/logo.png');
     }
 
     public function getAdminDashboardLogoUrlAttribute(): string
